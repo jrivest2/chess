@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BishopMoveCalculator implements MovesCalculator{
-    private enum Direction {POSITIVE_ROW_POSITIVE_COL, POSITIVE_ROW_NEGATIVE_COL, NEGATIVE_ROW_NEGATIVE_COL, NEGATIVE_ROW_POSITIVE_COL,}
+    private enum Direction {POSITIVE_ROW_POSITIVE_COL, POSITIVE_ROW_NEGATIVE_COL, NEGATIVE_ROW_NEGATIVE_COL, NEGATIVE_ROW_POSITIVE_COL}
     private List<ChessPosition> moves = new ArrayList<>();
     private List<ChessPosition> blacklist = new ArrayList<>();
     private final int[][] offsets = {
