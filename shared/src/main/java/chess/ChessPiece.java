@@ -57,13 +57,24 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         ChessPiece piece = board.getPiece(myPosition);
         Collection<ChessMove> moveChoices = new ArrayList<>();
-        if (piece.getPieceType() == PieceType.BISHOP) {
-           List<ChessPosition> validMoves = new BishopMoveCalculator().getValidMoves(myPosition, board);
-           for (ChessPosition move : validMoves) {
-               moveChoices.add(new ChessMove(myPosition, move, null));
-           }
+
+        switch (piece.getPieceType()) {
+            case BISHOP: {
+                List<ChessPosition> validMoves = new BishopMoveCalculator().getValidMoves(myPosition, board);
+                for (ChessPosition move : validMoves) {
+                    moveChoices.add(new ChessMove(myPosition, move, null));
+                }
+                return moveChoices;
+            }
+            case KING: {
+                List<ChessPosition> validMoves = new KingMoveCalculator().getValidMoves(myPosition, board);
+                for (ChessPosition move : validMoves) {
+                    moveChoices.add(new ChessMove(myPosition, move, null));
+                }
+                return moveChoices;
+            }
         }
-        return moveChoices;
+        return List.of();
     }
 
     @Override
