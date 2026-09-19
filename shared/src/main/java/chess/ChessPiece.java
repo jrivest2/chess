@@ -80,6 +80,13 @@ public class ChessPiece {
                 }
                 return moveChoices;
             }
+            case KNIGHT: {
+                List<ChessPosition> validMoves = new KnightMoveCalculator().getValidMoves(myPosition, board);
+                for (ChessPosition move : validMoves) {
+                    moveChoices.add(new ChessMove(myPosition, move, null));
+                }
+                return moveChoices;
+            }
         }
         return List.of();
     }
