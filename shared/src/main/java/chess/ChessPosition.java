@@ -34,6 +34,10 @@ public class ChessPosition {
         return col;
     }
 
+    public ChessPosition addOffset(int row, int col) {
+        return new ChessPosition(row+ this.row, col + this.col);
+    }
+
     @Override
     public String toString() {
         return String.format("[%d,%d]", row, col);
