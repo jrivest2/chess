@@ -73,6 +73,13 @@ public class ChessPiece {
                 }
                 return moveChoices;
             }
+            case ROOK: {
+                List<ChessPosition> validMoves = new RookMoveCalculator().getValidMoves(myPosition, board);
+                for (ChessPosition move : validMoves) {
+                    moveChoices.add(new ChessMove(myPosition, move, null));
+                }
+                return moveChoices;
+            }
         }
         return List.of();
     }

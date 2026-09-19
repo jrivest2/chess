@@ -1,0 +1,73 @@
+package chess;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class RookMoveCalculator implements MovesCalculator {
+    private enum Direction {POSITIVE_ROW, POSITIVE_COL, NEGATIVE_COL, NEGATIVE_ROW}
+    private List<ChessPosition> moves = new ArrayList<>();
+    private List<ChessPosition> blacklist = new ArrayList<>();
+    private final int[][] offsets = {
+            {0,1},{0,-1},{-1,0},{1,0},
+            {0,2},{0,-2},{-2,0},{2,0},
+            {0,3},{0,-3},{-3,0},{3,0},
+            {0,4},{0,-4},{-4,0},{4,0},
+            {0,5},{0,-5},{-5,0},{5,0},
+            {0,6},{0,-6},{-6,0},{6,0},
+            {0,7},{0,-7},{-7,0},{7,0}
+    };
+
+    private Direction findOffsetDirection(int[] offset) {
+        if (offset[0] == 0) {
+            if (offset[1] >= 0) return Direction.POSITIVE_COL;
+            else return Direction.NEGATIVE_COL;
+        } else if (offset[0] > 0) return Direction.POSITIVE_ROW;
+        else return Direction.NEGATIVE_ROW;
+    }
+    private void updateBlacklist(ChessPosition target, List<ChessPosition> blacklist, Direction offsetDirection) {
+        switch (offsetDirection) {
+            case POSITIVE_ROW: {
+                for (int i = target.getRow(); i <= 8; i++) {
+                    blacklist.add(new ChessPosition(i, target.getColumn()));
+                }
+            }
+            case POSITIVE_COL: {
+                for (int i = target.getColumn(); i <= 8; i++) {
+                    blacklist.add(new ChessPosition(target.getRow(), i));
+                }
+            }
+            case NEGATIVE_ROW: {
+                for (int i = target.getRow(); i >= 1; i--) {
+                    blacklist.add(new ChessPosition(i, target.getColumn()));
+                }
+            }
+            case NEGATIVE_COL: {
+                for (int i = target.getColumn(); i >= 1; i--) {
+                    blacklist.add(new ChessPosition(target.getRow(), i));
+                }
+            }
+        }
+    }
+
+    @Override
+    public List<ChessPosition> getValidMoves(ChessPosition position, ChessBoard board) {
+        ChessPiece piece = board.getPiece(position);
+
+        for (int[] offset: offsets) {
+            ChessPosition target = position.addOffset(offset[0], offset[1]);
+            RookMoveCalculator.Direction offsetDirection = findOffsetDirection(offset);
+
+            if (target.getRow() > 8 || target.getColumn() > 8
+                    || target.getRow() < 1 || target.getColumn() < 1) {  continue;
+            } else if (blacklist.contains(target)){ continue;
+            } else if (board.getPiece(target) != null) {
+                if (board.getPiece(target).getTeamColor() != piece.getTeamColor()) moves.add(target);
+                updateBlacklist(target,blacklist,offsetDirection);
+            } else {
+                moves.add(target);
+            }
+        }
+
+        return moves;
+    }
+}
