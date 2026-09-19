@@ -49,6 +49,7 @@ public class BishopMoveCalculator implements MovesCalculator{
         }
     }
 
+    @Override
     public List<ChessPosition> getValidMoves(ChessPosition position, ChessBoard board) {
         ChessPiece piece = board.getPiece(position);
 
