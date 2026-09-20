@@ -27,24 +27,28 @@ public class BishopMoveCalculator implements MovesCalculator{
     private void updateBlacklist(ChessPosition target, List<ChessPosition> blacklist, Direction offsetDirection) {
         switch (offsetDirection) {
             case POSITIVE_ROW_POSITIVE_COL: {
-                for (int i = target.getRow(), j = target.getColumn(); i <= 8 && j <= 8 ; i++, j++) {
+                for (int i = target.getRow() + 1, j = target.getColumn() + 1; i <= 8 && j <= 8 ; i++, j++) {
                     blacklist.add(new ChessPosition(i,j));
                 }
+                break;
             }
             case POSITIVE_ROW_NEGATIVE_COL: {
-                for (int i = target.getRow(), j = target.getColumn(); i <= 8 && j >= 1 ; i++, j--) {
+                for (int i = target.getRow() + 1, j = target.getColumn() - 1; i <= 8 && j >= 1 ; i++, j--) {
                     blacklist.add(new ChessPosition(i,j));
                 }
+                break;
             }
             case NEGATIVE_ROW_NEGATIVE_COL: {
-                for (int i = target.getRow(), j = target.getColumn(); i >= 1 && j >= 1 ; i--, j--) {
+                for (int i = target.getRow() - 1, j = target.getColumn() - 1; i >= 1 && j >= 1 ; i--, j--) {
                     blacklist.add(new ChessPosition(i,j));
                 }
+                break;
             }
             case NEGATIVE_ROW_POSITIVE_COL: {
-                for (int i = target.getRow(), j = target.getColumn(); i >= 1 && j <= 8 ; i--, j++) {
+                for (int i = target.getRow()- 1, j = target.getColumn() + 1; i >= 1 && j <= 8 ; i--, j++) {
                     blacklist.add(new ChessPosition(i,j));
                 }
+                break;
             }
         }
     }
