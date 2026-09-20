@@ -112,9 +112,7 @@ public class QueenMoveCalculator implements MovesCalculator{
                 moves.add(target);
             }
         }
-//        for (ChessPosition move : blacklist) {
-//            if (moves.contains(move)) moves.remove(move);
-//        }
+
         blacklist.clear();
         return moves;
     }

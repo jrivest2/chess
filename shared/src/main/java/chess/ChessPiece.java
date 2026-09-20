@@ -94,6 +94,13 @@ public class ChessPiece {
                 }
                 return moveChoices;
             }
+            case PAWN: {
+                List<ChessPosition> validMoves = new PawnMoveCalculator().getValidMoves(myPosition, board);
+                for (ChessPosition move : validMoves) {
+                    moveChoices.add(new ChessMove(myPosition, move, null));
+                }
+                return moveChoices;
+            }
         }
         return List.of();
     }
