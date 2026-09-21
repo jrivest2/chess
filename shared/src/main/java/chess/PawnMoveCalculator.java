@@ -68,9 +68,6 @@ public class PawnMoveCalculator implements MovesCalculator {
             default: break;
         }
     }
-    private void promote(ChessPosition target) {
-        for (int i = 0; i < 4; i++) moves.add(target);
-    }
 
     @Override
     public List<ChessPosition> getValidMoves(ChessPosition position, ChessBoard board) {
@@ -99,21 +96,19 @@ public class PawnMoveCalculator implements MovesCalculator {
             } else if (board.getPiece(target) != null) {
                 if (board.getPiece(target).getTeamColor() != piece.getTeamColor()) {
                     if (offset[1] != 0) {
-                        if (target.getRow() == 8 || target.getRow() == 1) promote(target);
-                        else moves.add(target);
+                        moves.add(target);
                     }
                 }
             } else if (board.getPiece(target) == null) {
                 if (offset[1] != 0) continue;
                 else {
-                    if (target.getRow() == 8 || target.getRow() == 1) promote(target);
-                    else if (offset[0] == 2) {
+                     if (offset[0] == 2 || offset[0] == -2) {
                         updateBlacklist(target, blacklist, offsetDirection, board);
+                        if (!blacklist.contains(target)) moves.add(target);
                     } else moves.add(target);
                 }
             } else {
-                if (target.getRow() == 8 || target.getRow() == 1) promote(target);
-                else if (piece.getTeamColor() != board.getPiece(target).getTeamColor()) moves.add(target);
+                if (piece.getTeamColor() != board.getPiece(target).getTeamColor()) moves.add(target);
                 else moves.add(target);
             }
         }

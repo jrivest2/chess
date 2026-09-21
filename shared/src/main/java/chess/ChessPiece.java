@@ -96,8 +96,14 @@ public class ChessPiece {
             }
             case PAWN: {
                 List<ChessPosition> validMoves = new PawnMoveCalculator().getValidMoves(myPosition, board);
+
                 for (ChessPosition move : validMoves) {
-                    moveChoices.add(new ChessMove(myPosition, move, null));
+                    if (move.getRow() == 1 || move.getRow() == 8) {
+                        moveChoices.add(new ChessMove(myPosition, move, PieceType.QUEEN));
+                        moveChoices.add(new ChessMove(myPosition, move, PieceType.BISHOP));
+                        moveChoices.add(new ChessMove(myPosition, move, PieceType.KNIGHT));
+                        moveChoices.add(new ChessMove(myPosition, move, PieceType.ROOK));
+                    } else moveChoices.add(new ChessMove(myPosition, move, null));
                 }
                 return moveChoices;
             }
