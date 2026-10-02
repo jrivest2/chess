@@ -3,25 +3,31 @@ package chess;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KingMoveCalculator implements MovesCalculator {
+public class KingMoveCalculator implements MoveCalculator {
     private List<ChessPosition> moves = new ArrayList<>();
-    private final int[][] offsets = {
-            {1,0},{0,1},{-1,0},{0,-1},
-            {1,1},{-1,1},{-1,-1},{1,-1}
+    private int[][] offsets = {
+            {1,0},{0,-1},{-1,-0},{0,1},
+            {1,1},{1,-1},{-1,-1},{-1,1}
     };
+
+
     @Override
-    public List<ChessPosition> getValidMoves(ChessPosition position, ChessBoard board) {
+    public List<ChessPosition> validMoves(ChessPosition position, ChessBoard board) {
         ChessPiece piece = board.getPiece(position);
 
         for (int[] offset : offsets) {
-            ChessPosition target = position.addOffset(offset[0], offset[1]);
+            ChessPosition target =  position.addOffset(offset[0],offset[1]);
+
             if (target.getRow() > 8 || target.getColumn() > 8
-                    || target.getRow() < 1 || target.getColumn() < 1
-                    || (board.getPiece(target) != null
-                    && board.getPiece(target).getTeamColor() == piece.getTeamColor())) {
-                continue;
-            } else moves.add(target);
+                    || target.getRow() < 1 || target.getColumn() < 1) continue;
+            else if (board.getPiece(target) != null) {
+                if (board.getPiece(target).getTeamColor() != piece.getTeamColor()) {
+                    moves.add(target);
+                }
+            }else moves.add(target);
+
         }
+
 
         return moves;
     }

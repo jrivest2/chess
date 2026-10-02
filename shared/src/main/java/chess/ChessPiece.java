@@ -55,69 +55,78 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        ChessPiece piece = board.getPiece(myPosition);
-        Collection<ChessMove> moveChoices = new ArrayList<>();
+        Collection<ChessMove> moves = new ArrayList<>();
 
-        switch (piece.getPieceType()) {
+        switch (type) {
             case BISHOP: {
-                List<ChessPosition> validMoves = new BishopMoveCalculator().getValidMoves(myPosition, board);
+                List<ChessPosition> validMoves = new BishopMoveCalculator().validMoves(myPosition, board);
+
                 for (ChessPosition move : validMoves) {
-                    moveChoices.add(new ChessMove(myPosition, move, null));
+                    moves.add(new ChessMove(myPosition, move, null));
                 }
-                return moveChoices;
-            }
-            case KING: {
-                List<ChessPosition> validMoves = new KingMoveCalculator().getValidMoves(myPosition, board);
-                for (ChessPosition move : validMoves) {
-                    moveChoices.add(new ChessMove(myPosition, move, null));
-                }
-                return moveChoices;
+                break;
             }
             case ROOK: {
-                List<ChessPosition> validMoves = new RookMoveCalculator().getValidMoves(myPosition, board);
-                for (ChessPosition move : validMoves) {
-                    moveChoices.add(new ChessMove(myPosition, move, null));
-                }
-                return moveChoices;
-            }
-            case KNIGHT: {
-                List<ChessPosition> validMoves = new KnightMoveCalculator().getValidMoves(myPosition, board);
-                for (ChessPosition move : validMoves) {
-                    moveChoices.add(new ChessMove(myPosition, move, null));
-                }
-                return moveChoices;
-            }
-            case QUEEN: {
-                List<ChessPosition> validMoves = new QueenMoveCalculator().getValidMoves(myPosition, board);
-                for (ChessPosition move : validMoves) {
-                    moveChoices.add(new ChessMove(myPosition, move, null));
-                }
-                return moveChoices;
-            }
-            case PAWN: {
-                List<ChessPosition> validMoves = new PawnMoveCalculator().getValidMoves(myPosition, board);
+                List<ChessPosition> validMoves = new RookMoveCalculator().validMoves(myPosition, board);
 
                 for (ChessPosition move : validMoves) {
-                    if (move.getRow() == 1 || move.getRow() == 8) {
-                        moveChoices.add(new ChessMove(myPosition, move, PieceType.QUEEN));
-                        moveChoices.add(new ChessMove(myPosition, move, PieceType.BISHOP));
-                        moveChoices.add(new ChessMove(myPosition, move, PieceType.KNIGHT));
-                        moveChoices.add(new ChessMove(myPosition, move, PieceType.ROOK));
-                    } else moveChoices.add(new ChessMove(myPosition, move, null));
+                    moves.add(new ChessMove(myPosition, move, null));
                 }
-                return moveChoices;
+                break;
+            }
+            case KING: {
+                List<ChessPosition> validMoves = new KingMoveCalculator().validMoves(myPosition, board);
+
+                for (ChessPosition move : validMoves) {
+                    moves.add(new ChessMove(myPosition, move, null));
+                }
+                break;
+            }
+            case KNIGHT: {
+                List<ChessPosition> validMoves = new KnightMoveCalculator().validMoves(myPosition, board);
+
+                for (ChessPosition move : validMoves) {
+                    moves.add(new ChessMove(myPosition, move, null));
+                }
+                break;
+            }
+            case QUEEN: {
+                List<ChessPosition> validMoves = new QueenMoveCalculator().validMoves(myPosition, board);
+
+                for (ChessPosition move : validMoves) {
+                    moves.add(new ChessMove(myPosition, move, null));
+                }
+                break;
+            }
+            case PAWN: {
+                List<ChessPosition> validMoves = new PawnMoveCalculator().validMoves(myPosition, board);
+
+                for (ChessPosition move : validMoves) {
+
+                    if (move.getRow() == 1 || move.getRow() == 8) {
+                        moves.add(new ChessMove(myPosition, move, PieceType.QUEEN));
+                        moves.add(new ChessMove(myPosition, move, PieceType.ROOK));
+                        moves.add(new ChessMove(myPosition, move, PieceType.BISHOP));
+                        moves.add(new ChessMove(myPosition, move, PieceType.KNIGHT));
+                    } else moves.add(new ChessMove(myPosition, move, null));
+                }
+                break;
             }
         }
-        return List.of();
+
+
+        return moves;
+    }
+
+    @Override
+    public String toString() {
+        return type + ", " + pieceColor;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null || this.getClass() != o.getClass()) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
-        }
-        if (o == this) {
-            return true;
         }
         ChessPiece that = (ChessPiece) o;
         return pieceColor == that.pieceColor && type == that.type;

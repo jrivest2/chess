@@ -12,6 +12,7 @@ import java.util.Objects;
 public class ChessBoard {
 
     ChessPiece[][] squares = new ChessPiece[8][8];
+
     public ChessBoard() {
         
     }
@@ -42,34 +43,28 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-
         squares = new ChessPiece[8][8];
-
-        int pawnRow;
-        ChessGame.TeamColor pawnColor;
-        for (int i = 0; i < 2; i++) {
-            if (i == 0) {
-                pawnRow = 1;
-                pawnColor = ChessGame.TeamColor.WHITE;
-            }
-            else {
-                pawnRow = 6;
-                pawnColor = ChessGame.TeamColor.BLACK;
-            }
-            for (int j = 0; j < 8; j++) {
-                squares[pawnRow][j] = new ChessPiece(pawnColor, ChessPiece.PieceType.PAWN);
-            }
-        }
 
         int pieceRow;
         ChessGame.TeamColor pieceColor;
 
         for (int i = 0; i < 2; i++) {
             if (i == 0) {
+                pieceRow = 1;
+                pieceColor = ChessGame.TeamColor.WHITE;
+            } else {
+                pieceRow = 6;
+                pieceColor = ChessGame.TeamColor.BLACK;
+            }
+            for (int j = 0; j < 8; j++) {
+                squares[pieceRow][j] = new ChessPiece(pieceColor, ChessPiece.PieceType.PAWN);
+            }
+        }
+        for (int i = 0; i < 2; i++) {
+            if (i == 0) {
                 pieceRow = 0;
                 pieceColor = ChessGame.TeamColor.WHITE;
-            }
-            else {
+            } else {
                 pieceRow = 7;
                 pieceColor = ChessGame.TeamColor.BLACK;
             }
@@ -79,9 +74,15 @@ public class ChessBoard {
                 if (j == 2 || j == 5) squares[pieceRow][j] = new ChessPiece(pieceColor, ChessPiece.PieceType.BISHOP);
                 if (j == 3) squares[pieceRow][j] = new ChessPiece(pieceColor, ChessPiece.PieceType.QUEEN);
                 if (j == 4) squares[pieceRow][j] = new ChessPiece(pieceColor, ChessPiece.PieceType.KING);
-
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ChessBoard{" +
+                "squares=" + Arrays.toString(squares) +
+                '}';
     }
 
     @Override
