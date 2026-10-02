@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * A class that can manage a chess game, making moves on a board
@@ -10,6 +11,9 @@ import java.util.Collection;
  */
 public class ChessGame {
 
+    TeamColor teamTurnIndicator = TeamColor.WHITE;
+    ChessBoard board = new ChessBoard();
+
     public ChessGame() {
 
     }
@@ -18,7 +22,7 @@ public class ChessGame {
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        throw new RuntimeException("Not implemented");
+        return this.teamTurnIndicator;
     }
 
     /**
@@ -27,7 +31,7 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        throw new RuntimeException("Not implemented");
+        this.teamTurnIndicator = team;
     }
 
     /**
@@ -47,6 +51,13 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         throw new RuntimeException("Not implemented");
+        /*
+        *   List of things this needs:
+        *       -checks if move in pieceMoves(startPosition)
+        *           -> Should be fine as is. Just get piece at startPosition and grab moves.
+        *       -Checks if move would put you in check
+        *           ->Needs a copy of board to simulate moves to use isInCheck()
+        */
     }
 
     /**
@@ -57,6 +68,25 @@ public class ChessGame {
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         throw new RuntimeException("Not implemented");
+        /*
+        *   List of things this needs:
+        *       -if move in this.validMoves(move.getStartPosition())
+        *       -and startPosition piece team color == teamColorIndicator
+        *           -make the move
+        *       -else: throw exception.
+        */
+    }
+
+    private ChessPosition findKing(TeamColor teamColor) {
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++){
+                ChessPosition square = new ChessPosition(i,j);
+                if (board.getPiece(square).equals(new ChessPiece(teamColor, ChessPiece.PieceType.KING))) {
+                    return square;
+                }
+            }
+        }
+        return null;
     }
 
     /**
@@ -66,7 +96,12 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        if (teamColor == TeamColor.WHITE) {
+            // USE findKing(WHITE), then check black pieces for pieceMoves
+        } else {
+            // USE findKing(BLACK), then check black pieces for pieceMoves
+        }
+        return false; // <-- Remove this after implementation.
     }
 
     /**
@@ -96,7 +131,14 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+        this.board = new ChessBoard();
+
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++){
+                ChessPosition square = new ChessPosition(i,j);
+                this.board.addPiece(square,board.getPiece(square));
+            }
+        }
     }
 
     /**
@@ -105,6 +147,28 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return this.board;
+    }
+
+    @Override
+    public String toString() {
+        return "ChessGame{" +
+                "teamTurnIndicator=" + teamTurnIndicator +
+                ", board=" + board +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessGame chessGame = (ChessGame) o;
+        return teamTurnIndicator == chessGame.teamTurnIndicator && Objects.equals(board, chessGame.board);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(teamTurnIndicator, board);
     }
 }
