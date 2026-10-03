@@ -80,9 +80,14 @@ public class ChessBoard implements Cloneable {
 
     @Override
     public String toString() {
-        return "ChessBoard{" +
-                "squares=" + Arrays.toString(squares) +
-                '}';
+        String result = "ChessBoard{";
+        for (ChessPiece[] row : this.squares) {
+            for (ChessPiece cell : row) {
+                result += cell.toString() + ", ";
+            }
+        }
+        result += "}";
+        return result;
     }
 
     @Override
@@ -109,7 +114,9 @@ public class ChessBoard implements Cloneable {
             for (int i = 0; i < this.squares.length; i++) {
                 clone.squares[i] = this.squares[i].clone();
                 for (int j = 0; j < this.squares[i].length; j++) {
-                    clone.squares[i][j] = new ChessPiece(this.squares[i][j].getTeamColor(), this.squares[i][j].getPieceType());
+                    if (this.squares[i][j] != null) {
+                        clone.squares[i][j] = new ChessPiece(this.squares[i][j].getTeamColor(), this.squares[i][j].getPieceType());
+                    } else clone.squares[i][j] = new ChessPiece(null, null);
                 }
             }
 

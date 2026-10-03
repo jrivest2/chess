@@ -112,6 +112,9 @@ public class ChessPiece {
                 }
                 break;
             }
+            case null: {
+                break;
+            }
         }
 
 
@@ -120,7 +123,7 @@ public class ChessPiece {
 
     @Override
     public String toString() {
-        return type + ", " + pieceColor;
+        return "[" +type + ", " + pieceColor + "]";
     }
 
     @Override
