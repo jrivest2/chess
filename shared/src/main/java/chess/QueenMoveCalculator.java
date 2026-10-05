@@ -109,10 +109,10 @@ public class QueenMoveCalculator implements MoveCalculator {
                     || target.getRow() < 1 || target.getColumn() < 1) continue;
             else if (blacklist.contains(target)) continue;
             else if (board.getPiece(target) != null) {
-                if (board.getPiece(target).getTeamColor() != piece.getTeamColor()) {
-                    moves.add(target);
-                    updateBlacklist(target, offsetDirection);
-                } else updateBlacklist(target, offsetDirection);
+                    if (board.getPiece(target).getTeamColor() != piece.getTeamColor()) {
+                        moves.add(target);
+                        updateBlacklist(target, offsetDirection);
+                    } else updateBlacklist(target, offsetDirection);
             }else moves.add(target);
 
         }
