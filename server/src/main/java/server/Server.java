@@ -19,8 +19,19 @@ public class Server {
 
         // Register your endpoints and exception handlers here.
         javalin.post("/user", this::addUser);
+        javalin.delete("/db", this::clearDB);
     }
-
+    //Clear Endpoint
+    public void clearDB(Context ctx) {
+        ctx.contentType("application/json");
+        try {
+            userService.clearDB();
+            ctx.result(new Gson().toJson("{}"));
+        } catch (Exception e) {
+            ctx.status(500);
+            ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));        }
+    }
+    //Register Endpoint
     public void addUser(Context ctx) {
         RegisterRequest request = new Gson().fromJson(ctx.body(),RegisterRequest.class);
         ctx.contentType("application/json");
