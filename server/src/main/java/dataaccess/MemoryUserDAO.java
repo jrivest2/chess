@@ -1,29 +1,20 @@
 package dataaccess;
 
-import model.AuthData;
 import model.RegisterRequest;
 import model.UserData;
 
-import java.util.UUID;
+import java.util.HashMap;
 
 public class MemoryUserDAO implements UserDAO {
+    HashMap<String, UserData> userDataTable = new HashMap<>();
     @Override
     public UserData getUser(String username) {
-        //get UserData from memory or return null
-        return null;
+        return userDataTable.get(username);
     }
 
     @Override
     public void createUser(RegisterRequest registerRequest) {
         UserData userData =  new UserData(registerRequest.username(), registerRequest.password(), registerRequest.email());
-        //send userData to memory
-    }
-
-    @Override
-    public String createAuth(String username) {
-        String authToken = UUID.randomUUID().toString();
-        AuthData authData = new AuthData(username, authToken);
-        //send authData to memory
-        return authToken;
+        userDataTable.put(registerRequest.username(),userData);
     }
 }
