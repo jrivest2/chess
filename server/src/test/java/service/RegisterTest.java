@@ -50,6 +50,9 @@ public class RegisterTest {
         RegisterRequest test1 = new RegisterRequest("", "testPassword", "test2@email");
         RegisterRequest test2 = new RegisterRequest("testUser3", "", "test2@email");
         RegisterRequest test3 = new RegisterRequest("testUser4", "testPassword", "");
+        RegisterRequest test4 = new RegisterRequest(null, "testPassword", "test4@email");
+        RegisterRequest test5 = new RegisterRequest("testUser4", null, "test5@email");
+        RegisterRequest test6 = new RegisterRequest("testUser4", "testPassword", null);
         assertThrows(InvalidArgumentException.class, () -> {
             userService.register(test1);
         });
@@ -58,6 +61,15 @@ public class RegisterTest {
         });
         assertThrows(InvalidArgumentException.class, () -> {
             userService.register(test3);
+        });
+        assertThrows(InvalidArgumentException.class, () -> {
+            userService.register(test4);
+        });
+        assertThrows(InvalidArgumentException.class, () -> {
+            userService.register(test5);
+        });
+        assertThrows(InvalidArgumentException.class, () -> {
+            userService.register(test6);
         });
     }
 }
