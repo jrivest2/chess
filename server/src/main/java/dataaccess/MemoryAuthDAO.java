@@ -19,8 +19,19 @@ public class MemoryAuthDAO implements AuthDAO {
     public AuthData getAuth(String username) {
         return authDataTable.get(username);
     }
+
+    @Override
+    public int getSize() {
+        return authDataTable.size();
+    }
+
     @Override
     public void clearDB() {
         authDataTable.clear();
+    }
+
+    @Override
+    public void deleteAuth(String username) {
+        authDataTable.remove(username);
     }
 }

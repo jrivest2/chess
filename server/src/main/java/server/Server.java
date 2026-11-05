@@ -5,8 +5,7 @@ import com.google.gson.Gson;
 import dataaccess.AlreadyTakenException;
 import io.javalin.*;
 import io.javalin.http.Context;
-import model.RegisterRequest;
-import model.RegisterResult;
+import model.*;
 
 import java.util.Map;
 
@@ -19,7 +18,32 @@ public class Server {
 
         // Register your endpoints and exception handlers here.
         javalin.post("/user", this::addUser);
+        javalin.post("/session", this::login);
+        javalin.delete("/session", this::logout);
         javalin.delete("/db", this::clearDB);
+    }
+
+    //Logout Endpoint
+    public void logout(Context ctx) {
+        ctx.contentType("application/json");
+        LogoutRequest  request = new Gson().fromJson(ctx.body(), LogoutRequest.class);
+        try {
+            userService.logout(request);
+        } catch (Exception e) {
+            ctx.status(404);
+            ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        }
+    }
+    //Login Endpoint
+    public void login(Context ctx) {
+        LoginRequest  request = new Gson().fromJson(ctx.body(),LoginRequest.class);
+        ctx.contentType("application/json");
+        try {
+            userService.login(request);
+        } catch (Exception e) {
+            ctx.status(401);
+            ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        }
     }
     //Clear Endpoint
     public void clearDB(Context ctx) {

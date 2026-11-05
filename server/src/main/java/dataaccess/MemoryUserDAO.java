@@ -19,6 +19,11 @@ public class MemoryUserDAO implements UserDAO {
     }
 
     @Override
+    public int getSize() {
+        return userDataTable.size();
+    }
+
+    @Override
     public void clearDB() {
         userDataTable.clear();
     }

@@ -7,5 +7,7 @@ public interface UserDAO {
     UserData getUser(String username);
     void createUser(RegisterRequest registerRequest);
 
+    int getSize();
+
     void clearDB();
 }
