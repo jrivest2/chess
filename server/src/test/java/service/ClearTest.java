@@ -2,7 +2,6 @@ package service;
 
 import Service.UserService;
 import model.RegisterRequest;
-import model.RegisterResult;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +18,7 @@ public class ClearTest {
     @Test
     public void successfulTest() {
         RegisterRequest test = new RegisterRequest("testUser", "testPassword", "test@email");
-        RegisterResult result = userService.register(test);
+        userService.register(test);
         userService.clearDB();
         int[] sizes = userService.getDBSizes();
         assertEquals(0, sizes[0]);
