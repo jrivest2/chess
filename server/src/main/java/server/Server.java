@@ -29,6 +29,7 @@ public class Server {
         LogoutRequest  request = new Gson().fromJson(ctx.body(), LogoutRequest.class);
         try {
             userService.logout(request);
+            ctx.result(new Gson().toJson("Success"));
         } catch (Exception e) {
             ctx.status(404);
             ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
@@ -39,7 +40,8 @@ public class Server {
         LoginRequest  request = new Gson().fromJson(ctx.body(),LoginRequest.class);
         ctx.contentType("application/json");
         try {
-            userService.login(request);
+            LoginResult result = userService.login(request);
+            ctx.result(new Gson().toJson(result));
         } catch (Exception e) {
             ctx.status(401);
             ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
