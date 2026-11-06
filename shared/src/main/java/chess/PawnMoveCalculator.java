@@ -21,7 +21,9 @@ public class PawnMoveCalculator implements MoveCalculator {
     private int[][] addStarterOffset(int[][] offsets, int[] starterOffset) {
         List<int[]> tempList = new ArrayList<>();
 
-        for (int i = 0; i < 3; i++) tempList.add(offsets[i]);
+        for (int i = 0; i < 3; i++) {
+            tempList.add(offsets[i]);
+        }
         tempList.add(starterOffset);
 
         return tempList.toArray(new int[0][]);
