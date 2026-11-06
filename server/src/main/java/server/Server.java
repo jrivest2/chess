@@ -11,6 +11,7 @@ import model.*;
 
 import java.util.Map;
 
+
 public class Server {
     UserService userService = new UserService();
     private final Javalin javalin;
