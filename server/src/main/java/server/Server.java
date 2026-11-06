@@ -1,8 +1,10 @@
 package server;
 
+import Service.InvalidArgumentException;
 import Service.UserService;
 import com.google.gson.Gson;
 import dataaccess.AlreadyTakenException;
+import dataaccess.IncorrectCredentialsException;
 import io.javalin.*;
 import io.javalin.http.Context;
 import model.*;
@@ -20,18 +22,37 @@ public class Server {
         javalin.post("/user", this::addUser);
         javalin.post("/session", this::login);
         javalin.delete("/session", this::logout);
+        javalin.post("/game", this::createGame);
         javalin.delete("/db", this::clearDB);
+    }
+
+    private void createGame(Context ctx) {
+        ctx.contentType("application/json");
+        String token = ctx.header("Authorization");
+        CreateGameRequest temp = new Gson().fromJson(ctx.body(),CreateGameRequest.class);
+        CreateGameRequest request = new CreateGameRequest(token, temp.gameName());
+        try {
+            CreateGameResult result = userService.createGame(request);
+            ctx.result(new Gson().toJson(result));
+        } catch (InvalidArgumentException e) {
+            ctx.status(400);
+            ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        } catch (IncorrectCredentialsException e) {
+            ctx.status(401);
+            ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        }
     }
 
     //Logout Endpoint
     public void logout(Context ctx) {
         ctx.contentType("application/json");
-        LogoutRequest  request = new Gson().fromJson(ctx.body(), LogoutRequest.class);
+        LogoutRequest  request = new LogoutRequest(ctx.header("Authorization"));
         try {
             userService.logout(request);
-            ctx.result(new Gson().toJson("Success"));
+            ctx.status(200);
+            ctx.result("{}");
         } catch (Exception e) {
-            ctx.status(404);
+            ctx.status(401);
             ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
         }
     }
@@ -42,8 +63,11 @@ public class Server {
         try {
             LoginResult result = userService.login(request);
             ctx.result(new Gson().toJson(result));
-        } catch (Exception e) {
+        } catch (IncorrectCredentialsException e) {
             ctx.status(401);
+            ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        } catch (InvalidArgumentException e) {
+            ctx.status(400);
             ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
         }
     }
@@ -52,7 +76,6 @@ public class Server {
         ctx.contentType("application/json");
         try {
             userService.clearDB();
-            ctx.result(new Gson().toJson("{}"));
         } catch (Exception e) {
             ctx.status(500);
             ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));        }
@@ -66,6 +89,9 @@ public class Server {
             ctx.result(new Gson().toJson(result));
         } catch (AlreadyTakenException e) {
             ctx.status(403);
+            ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        } catch (InvalidArgumentException e) {
+            ctx.status(400);
             ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
         }
 

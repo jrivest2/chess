@@ -25,7 +25,7 @@ public class UserService {
         if (Objects.equals(registerRequest.username(), "") || registerRequest.username() == null
                 || Objects.equals(registerRequest.password(), "") || registerRequest.password() == null
                 || Objects.equals(registerRequest.email(), "") || registerRequest.email() == null) {
-            throw new InvalidArgumentException("Please fill every field.");
+            throw new InvalidArgumentException("Error: bad request");
         }
 
         UserData userData = userDao.getUser(registerRequest.username());
@@ -35,13 +35,16 @@ public class UserService {
 
             return new RegisterResult(registerRequest.username(), authToken);
         }
-        throw new AlreadyTakenException("The username: \"" + registerRequest.username() + "\" is already taken.");
+        throw new AlreadyTakenException("Error: The username: \"" + registerRequest.username() + "\" is already taken.");
     }
 
     public LoginResult login(LoginRequest request) {
+        if (request.username() == null || request.password() == null) {
+            throw new InvalidArgumentException("Error: Bad Request");
+        }
         UserData user = userDao.getUser(request.username());
         if (user == null) {
-            throw new IncorrectCredentialsException("Incorrect username or password");
+            throw new IncorrectCredentialsException("Error: unauthorized");
         }
         if (authDao.getAuth(request.username()) != null) {
             throw new IncorrectCredentialsException("Already Logged In");
@@ -50,19 +53,37 @@ public class UserService {
             String authToken = authDao.createAuth(user.username());
             return new LoginResult(user.username(), authToken);
         } else {
-            throw new IncorrectCredentialsException("Incorrect username or password");
+            throw new IncorrectCredentialsException("Error: unauthorized");
         }
      }
 
     public void logout(LogoutRequest request) {
-        AuthData authData = authDao.getAuth(request.username());
+        if (request.authToken() == null) {
+            throw new IncorrectCredentialsException("Error: Login Session not found");
+        }
+        AuthData authData = authDao.getAuth(request.authToken());
         if (authData == null) {
-            throw new IncorrectCredentialsException("Login Session not found");
+            throw new IncorrectCredentialsException("Error: Login Session not found");
         }
         if (Objects.equals(request.authToken(), authData.authToken())) {
-            authDao.deleteAuth(authData.username());
+            authDao.deleteAuth(authData.authToken());
         } else {
-            throw new IncorrectCredentialsException("Login Session not found");
+            throw new IncorrectCredentialsException("Error: Login Session not found");
+        }
+    }
+    public CreateGameResult createGame(CreateGameRequest request) {
+        if (request.authToken() == null) {
+            throw new IncorrectCredentialsException("Error: unauthorized");
+        }
+        if (authDao.getAuth(request.authToken()) != null) {
+            if (request.gameName() == null) {
+                throw new InvalidArgumentException("Error: No Game Name provided");
+            } else {
+                int gameID = gameDao.createGame(request.gameName());
+                return new CreateGameResult(gameID);
+            }
+        } else {
+            throw new IncorrectCredentialsException("Error: unauthorized");
         }
     }
 }

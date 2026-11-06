@@ -26,15 +26,15 @@ public class LoginLogoutTest {
     @Test
     public void successfulLogoutTest() {
         int authTableSize = userService.getDBSizes()[1];
-        userService.logout(new LogoutRequest(result.username(), registerToken));
+        userService.logout(new LogoutRequest(registerToken));
         int authTableLogoutSize = userService.getDBSizes()[1];
 
         assertTrue(authTableSize != authTableLogoutSize);
-        assertThrows(IncorrectCredentialsException.class, () -> userService.logout(new LogoutRequest(result.username(), registerToken)));
+        assertThrows(IncorrectCredentialsException.class, () -> userService.logout(new LogoutRequest(registerToken)));
     }
     @Test
     public void successfulLoginTest() {
-        userService.logout(new LogoutRequest(result.username(),result.authToken()));
+        userService.logout(new LogoutRequest(result.authToken()));
         LoginResult loginResult = userService.login(new LoginRequest("testUser", "testPassword"));
         assertNotNull(loginResult);
         assertEquals("testUser", loginResult.username());
@@ -45,7 +45,7 @@ public class LoginLogoutTest {
     public void failedLoginTest() {
         assertThrows(IncorrectCredentialsException.class, () -> userService.login(new LoginRequest("testUser","testPassword")));
 
-        userService.logout(new LogoutRequest(result.username(),registerToken));
+        userService.logout(new LogoutRequest(registerToken));
         assertThrows(IncorrectCredentialsException.class, () -> userService.login(new LoginRequest("", registerToken)));
         assertThrows(IncorrectCredentialsException.class, () -> userService.login(new LoginRequest("testUser", "")));
     }
