@@ -27,9 +27,6 @@ public class BishopMoveCalculator implements MoveCalculator {
             if (offset[1] > 0) return Direction.NEGATIVE_ROW_POSITIVE_COL;
             else return Direction.NEGATIVE_ROW_NEGATIVE_COL;
         }
-
-
-
     }
 
     private void updateBlacklist(ChessPosition target, Direction offsetDirection) {

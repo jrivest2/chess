@@ -1,7 +1,7 @@
 package server;
 
-import Service.InvalidArgumentException;
-import Service.UserService;
+import service.InvalidArgumentException;
+import service.UserService;
 import com.google.gson.Gson;
 import dataaccess.AlreadyTakenException;
 import dataaccess.IncorrectCredentialsException;

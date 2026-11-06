@@ -1,4 +1,4 @@
-package Service;
+package service;
 
 public class InvalidArgumentException extends RuntimeException {
     public InvalidArgumentException(String message) {

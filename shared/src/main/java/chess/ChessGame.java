@@ -165,15 +165,24 @@ public class ChessGame {
             for (int j = 1; j <= 8; j++){
                 ChessPosition square = new ChessPosition(i,j);
                 ChessPiece otherPiece = board.getPiece(square);
-                if (otherPiece == null) continue;
+                if (otherPiece == null) {
+                    continue;
+                }
                 if (otherPiece.getTeamColor() == otherTeamColor) {
                     Collection<ChessMove> otherPieceMoves = otherPiece.pieceMoves(this.board, square);
-                    for (ChessMove move : otherPieceMoves) {
-                       if (move.getEndPosition().equals(king)) {
-                           return true;
-                       }
+                    if (checkOtherPiecesMovesAgainstKing(king,otherPieceMoves)) {
+                        return true;
                     }
                 }
+            }
+        }
+        return false;
+    }
+
+    private boolean checkOtherPiecesMovesAgainstKing(ChessPosition king, Collection<ChessMove> otherPieceMoves) {
+        for (ChessMove move : otherPieceMoves) {
+            if (move.getEndPosition().equals(king)) {
+                return true;
             }
         }
         return false;

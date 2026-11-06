@@ -10,7 +10,6 @@ public class KnightMoveCalculator implements MoveCalculator {
             {-2,1},{1,-2},{-1,-2},{-2,-1}
     };
 
-
     @Override
     public List<ChessPosition> validMoves(ChessPosition position, ChessBoard board) {
         ChessPiece piece = board.getPiece(position);

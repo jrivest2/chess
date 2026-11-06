@@ -1,7 +1,5 @@
 package service;
 
-import Service.InvalidArgumentException;
-import Service.UserService;
 import dataaccess.AlreadyTakenException;
 import model.RegisterRequest;
 import model.RegisterResult;

@@ -1,6 +1,5 @@
 package service;
 
-import Service.UserService;
 import model.RegisterRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

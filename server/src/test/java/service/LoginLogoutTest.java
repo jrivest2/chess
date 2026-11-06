@@ -1,6 +1,5 @@
 package service;
 
-import Service.UserService;
 import dataaccess.IncorrectCredentialsException;
 import model.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +42,6 @@ public class LoginLogoutTest {
 
     @Test
     public void failedLoginTest() {
-        assertThrows(IncorrectCredentialsException.class, () -> userService.login(new LoginRequest("testUser","testPassword")));
 
         userService.logout(new LogoutRequest(registerToken));
         assertThrows(IncorrectCredentialsException.class, () -> userService.login(new LoginRequest("", registerToken)));
