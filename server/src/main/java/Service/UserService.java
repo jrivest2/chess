@@ -76,7 +76,7 @@ public class UserService {
             throw new IncorrectCredentialsException("Error: unauthorized");
         }
         if (authDao.getAuth(request.authToken()) != null) {
-            if (request.gameName() == null) {
+            if (request.gameName() == null || request.gameName().isEmpty()) {
                 throw new InvalidArgumentException("Error: No Game Name provided");
             } else {
                 int gameID = gameDao.createGame(request.gameName());
