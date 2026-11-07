@@ -5,7 +5,7 @@ import java.util.List;
 
 public class RookMoveCalculator implements MoveCalculator {
     private List<ChessPosition> moves = new ArrayList<>();
-    private int[][] offsets = {
+    private final int[][] offsets = {
             {1,0},{0,-1},{-1,-0},{0,1},
             {2,0},{0,-2},{-2,-0},{0,2},
             {3,0},{0,-3},{-3,-0},{0,3},
@@ -20,11 +20,19 @@ public class RookMoveCalculator implements MoveCalculator {
 
     private Direction findDirection(ChessPosition target, int[] offset) {
         if (offset[0] == 0) {
-            if (offset[1] > 0) return Direction.POSITIVE_COL;
-            else return Direction.NEGATIVE_COL;
+            if (offset[1] > 0) {
+                return Direction.POSITIVE_COL;
+            }
+            else {
+                return Direction.NEGATIVE_COL;
+            }
         } else {
-            if (offset[0] > 0) return Direction.POSITIVE_ROW;
-            else return Direction.NEGATIVE_ROW;
+            if (offset[0] > 0) {
+                return Direction.POSITIVE_ROW;
+            }
+            else {
+                return Direction.NEGATIVE_ROW;
+            }
         }
 
 
@@ -69,18 +77,24 @@ public class RookMoveCalculator implements MoveCalculator {
             Direction offsetDirection = findDirection(target, offset);
 
             if (target.getRow() > 8 || target.getColumn() > 8
-                    || target.getRow() < 1 || target.getColumn() < 1) continue;
-            else if (blacklist.contains(target)) continue;
+                    || target.getRow() < 1 || target.getColumn() < 1) {
+                continue;
+            }
+            else if (blacklist.contains(target)) {
+                continue;
+            }
             else if (board.getPiece(target) != null) {
                 if (board.getPiece(target).getTeamColor() != piece.getTeamColor()) {
                     moves.add(target);
                     updateBlacklist(target, offsetDirection);
-                } else updateBlacklist(target, offsetDirection);
-            }else moves.add(target);
+                } else {
+                    updateBlacklist(target, offsetDirection);
+                }
+            }else {
+                moves.add(target);
+            }
 
         }
-
-
         return moves;
     }
 }
