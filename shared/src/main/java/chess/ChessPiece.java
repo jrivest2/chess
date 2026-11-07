@@ -108,7 +108,9 @@ public class ChessPiece {
                         moves.add(new ChessMove(myPosition, move, PieceType.ROOK));
                         moves.add(new ChessMove(myPosition, move, PieceType.BISHOP));
                         moves.add(new ChessMove(myPosition, move, PieceType.KNIGHT));
-                    } else moves.add(new ChessMove(myPosition, move, null));
+                    } else {
+                        moves.add(new ChessMove(myPosition, move, null));
+                    }
                 }
                 break;
             }

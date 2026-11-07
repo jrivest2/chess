@@ -69,11 +69,21 @@ public class ChessBoard implements Cloneable {
                 pieceColor = ChessGame.TeamColor.BLACK;
             }
             for (int j = 0; j < 8; j++) {
-                if (j == 0 || j == 7) squares[pieceRow][j] = new ChessPiece(pieceColor, ChessPiece.PieceType.ROOK);
-                if (j == 1 || j == 6) squares[pieceRow][j] = new ChessPiece(pieceColor, ChessPiece.PieceType.KNIGHT);
-                if (j == 2 || j == 5) squares[pieceRow][j] = new ChessPiece(pieceColor, ChessPiece.PieceType.BISHOP);
-                if (j == 3) squares[pieceRow][j] = new ChessPiece(pieceColor, ChessPiece.PieceType.QUEEN);
-                if (j == 4) squares[pieceRow][j] = new ChessPiece(pieceColor, ChessPiece.PieceType.KING);
+                if (j == 0 || j == 7) {
+                    squares[pieceRow][j] = new ChessPiece(pieceColor, ChessPiece.PieceType.ROOK);
+                }
+                if (j == 1 || j == 6) {
+                    squares[pieceRow][j] = new ChessPiece(pieceColor, ChessPiece.PieceType.KNIGHT);
+                }
+                if (j == 2 || j == 5) {
+                    squares[pieceRow][j] = new ChessPiece(pieceColor, ChessPiece.PieceType.BISHOP);
+                }
+                if (j == 3) {
+                    squares[pieceRow][j] = new ChessPiece(pieceColor, ChessPiece.PieceType.QUEEN);
+                }
+                if (j == 4) {
+                    squares[pieceRow][j] = new ChessPiece(pieceColor, ChessPiece.PieceType.KING);
+                }
             }
         }
     }
@@ -83,8 +93,12 @@ public class ChessBoard implements Cloneable {
         String result = "ChessBoard{\n";
         for (ChessPiece[] row : this.squares) {
             for (ChessPiece cell : row) {
-                if (cell == null) result += "null, ";
-                else result += cell + ", ";
+                if (cell == null) {
+                    result += "null, ";
+                }
+                else {
+                    result += cell + ", ";
+                }
             }
             result += "\n";
         }
@@ -117,7 +131,9 @@ public class ChessBoard implements Cloneable {
                 for (int j = 0; j < this.squares[i].length; j++) {
                     if (this.squares[i][j] != null) {
                         clone.squares[i][j] = new ChessPiece(this.squares[i][j].getTeamColor(), this.squares[i][j].getPieceType());
-                    } else clone.squares[i][j] = null;
+                    } else {
+                        clone.squares[i][j] = null;
+                    }
                 }
             }
 
