@@ -5,7 +5,7 @@ import java.util.List;
 
 public class QueenMoveCalculator implements MoveCalculator {
     private List<ChessPosition> moves = new ArrayList<>();
-    private int[][] offsets = {
+    private final int[][] offsets = {
             {1,1},{1,-1},{-1,-1},{-1,1},
             {2,2},{2,-2},{-2,-2},{-2,2},
             {3,3},{3,-3},{-3,-3},{-3,3},
@@ -27,19 +27,33 @@ public class QueenMoveCalculator implements MoveCalculator {
         NEGATIVE_ROW_NEGATIVE_COL, NEGATIVE_ROW_POSITIVE_COL,
         POSITIVE_ROW,NEGATIVE_COL,
         NEGATIVE_ROW, POSITIVE_COL
-    };
+    }
 
     private Direction findDirection(ChessPosition target, int[] offset) {
         if (offset[0] > 0) {
-            if (offset[1] > 0) return Direction.POSITIVE_ROW_POSITIVE_COL;
-            else if (offset[1] < 0) return Direction.POSITIVE_ROW_NEGATIVE_COL;
-            else return Direction.POSITIVE_ROW;
+            if (offset[1] > 0) {
+                return Direction.POSITIVE_ROW_POSITIVE_COL;
+            }
+            else if (offset[1] < 0) {
+                return Direction.POSITIVE_ROW_NEGATIVE_COL;
+            }
+            else {
+                return Direction.POSITIVE_ROW;
+            }
         } else if (offset[0] < 0) {
-            if (offset[1] > 0) return Direction.NEGATIVE_ROW_POSITIVE_COL;
-            else if (offset[1] < 0) return Direction.NEGATIVE_ROW_NEGATIVE_COL;
-            else return Direction.NEGATIVE_ROW;
+            if (offset[1] > 0) {
+                return Direction.NEGATIVE_ROW_POSITIVE_COL;
+            }
+            else if (offset[1] < 0) {
+                return Direction.NEGATIVE_ROW_NEGATIVE_COL;
+            }
+            else {
+                return Direction.NEGATIVE_ROW;
+            }
         } else {
-            if (offset[1] > 0) return Direction.POSITIVE_COL;
+            if (offset[1] > 0) {
+                return Direction.POSITIVE_COL;
+            }
             return Direction.NEGATIVE_COL;
         }
     }
@@ -106,18 +120,24 @@ public class QueenMoveCalculator implements MoveCalculator {
             Direction offsetDirection = findDirection(target, offset);
 
             if (target.getRow() > 8 || target.getColumn() > 8
-                    || target.getRow() < 1 || target.getColumn() < 1) continue;
-            else if (blacklist.contains(target)) continue;
+                    || target.getRow() < 1 || target.getColumn() < 1) {
+                continue;
+            }
+            else if (blacklist.contains(target)) {
+                continue;
+            }
             else if (board.getPiece(target) != null) {
                     if (board.getPiece(target).getTeamColor() != piece.getTeamColor()) {
                         moves.add(target);
                         updateBlacklist(target, offsetDirection);
-                    } else updateBlacklist(target, offsetDirection);
-            }else moves.add(target);
+                    } else {
+                        updateBlacklist(target, offsetDirection);
+                    }
+            }else {
+                moves.add(target);
+            }
 
         }
-
-
         return moves;
     }
 }
