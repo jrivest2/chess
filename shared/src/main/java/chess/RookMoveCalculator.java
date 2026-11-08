@@ -18,31 +18,7 @@ public class RookMoveCalculator implements MoveCalculator {
 
     @Override
     public List<ChessPosition> validMoves(ChessPosition position, ChessBoard board) {
-        ChessPiece piece = board.getPiece(position);
-
-        for (int[] offset : offsets) {
-            ChessPosition target =  position.addOffset(offset[0],offset[1]);
-            Direction offsetDirection = omniDirectionalFindDirection(offset);
-
-            if (target.getRow() > 8 || target.getColumn() > 8
-                    || target.getRow() < 1 || target.getColumn() < 1) {
-                continue;
-            }
-            else if (blacklist.contains(target)) {
-                continue;
-            }
-            else if (board.getPiece(target) != null) {
-                if (board.getPiece(target).getTeamColor() != piece.getTeamColor()) {
-                    moves.add(target);
-                    blacklist = updateBlacklistMaster(target,offsetDirection,blacklist);
-                } else {
-                    blacklist = updateBlacklistMaster(target,offsetDirection,blacklist);
-                }
-            }else {
-                moves.add(target);
-            }
-
-        }
+        moves = validMovesSliders(position, board, offsets, moves, blacklist);
         return moves;
     }
 }

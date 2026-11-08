@@ -60,6 +60,33 @@ public interface MoveCalculator {
         return moves;
     }
 
+    default List<ChessPosition> validMovesSliders(ChessPosition position, ChessBoard board, int[][] offsets, List<ChessPosition> moves, List<ChessPosition> blacklist) {
+        ChessPiece piece = board.getPiece(position);
+
+        for (int[] offset : offsets) {
+            ChessPosition target =  position.addOffset(offset[0],offset[1]);
+            Direction offsetDirection = omniDirectionalFindDirection(offset);
+
+            if (target.getRow() > 8 || target.getColumn() > 8
+                    || target.getRow() < 1 || target.getColumn() < 1) {
+                continue;
+            }
+            else if (blacklist.contains(target)) {
+                continue;
+            }
+            else if (board.getPiece(target) != null) {
+                if (board.getPiece(target).getTeamColor() != piece.getTeamColor()) {
+                    moves.add(target);
+                }
+                blacklist = updateBlacklistMaster(target,offsetDirection,blacklist);
+            }else {
+                moves.add(target);
+            }
+
+        }
+        return moves;
+    }
+
     default List<ChessPosition> updateBlacklistMaster(ChessPosition target, Direction offsetDirection, List<ChessPosition> blacklist) {
         switch (offsetDirection) {
             case POSITIVE_ROW_POSITIVE_COL: {
