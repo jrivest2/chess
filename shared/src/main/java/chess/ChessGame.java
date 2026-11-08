@@ -201,19 +201,7 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        Collection<ChessMove> totalValidMoves = new ArrayList<>();
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++){
-                ChessPosition square = new ChessPosition(i,j);
-                if (board.getPiece(square) == null) {
-                    continue;
-                }
-                if (board.getPiece(square).getTeamColor() == teamColor) {
-                    Collection<ChessMove> pieceMoves = validMoves(square);
-                    totalValidMoves.addAll(pieceMoves);
-                }
-            }
-        }
+        Collection<ChessMove> totalValidMoves = getAllMoves(teamColor);
         return isInCheck(teamColor) && totalValidMoves.isEmpty();
     }
 
@@ -225,6 +213,11 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
+        Collection<ChessMove> totalValidMoves = getAllMoves(teamColor);
+        return !isInCheck(teamColor) && totalValidMoves.isEmpty();
+    }
+
+    public Collection<ChessMove> getAllMoves(TeamColor teamColor) {
         Collection<ChessMove> totalValidMoves = new ArrayList<>();
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++){
@@ -238,8 +231,7 @@ public class ChessGame {
                 }
             }
         }
-
-        return !isInCheck(teamColor) && totalValidMoves.isEmpty();
+        return totalValidMoves;
     }
 
     /**
