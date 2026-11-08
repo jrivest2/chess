@@ -17,10 +17,6 @@ public class BishopMoveCalculator implements MoveCalculator {
     };
     private List<ChessPosition> blacklist = new ArrayList<>();
 
-    private void updateBlacklist(ChessPosition target, Direction offsetDirection) {
-        blacklist = updateBlacklistMaster(target,offsetDirection,blacklist);
-    }
-
     @Override
     public List<ChessPosition> validMoves(ChessPosition position, ChessBoard board) {
         ChessPiece piece = board.getPiece(position);
@@ -39,9 +35,9 @@ public class BishopMoveCalculator implements MoveCalculator {
             else if (board.getPiece(target) != null) {
                 if (board.getPiece(target).getTeamColor() != piece.getTeamColor()) {
                     moves.add(target);
-                    updateBlacklist(target, offsetDirection);
+                    blacklist = updateBlacklistMaster(target,offsetDirection,blacklist);
                 } else {
-                    updateBlacklist(target, offsetDirection);
+                    blacklist = updateBlacklistMaster(target,offsetDirection,blacklist);
                 }
             }else {
                 moves.add(target);
