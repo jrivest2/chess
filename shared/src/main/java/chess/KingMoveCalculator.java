@@ -13,26 +13,7 @@ public class KingMoveCalculator implements MoveCalculator {
 
     @Override
     public List<ChessPosition> validMoves(ChessPosition position, ChessBoard board) {
-        ChessPiece piece = board.getPiece(position);
-
-        for (int[] offset : offsets) {
-            ChessPosition target =  position.addOffset(offset[0],offset[1]);
-
-            if (target.getRow() > 8 || target.getColumn() > 8
-                    || target.getRow() < 1 || target.getColumn() < 1) {
-                continue;
-            }
-            else if (board.getPiece(target) != null) {
-                if (board.getPiece(target).getTeamColor() != piece.getTeamColor()) {
-                    moves.add(target);
-                }
-            }else {
-                moves.add(target);
-            }
-
-        }
-
-
+        moves = knightKingvalidMoves(position, board, offsets, moves);
         return moves;
     }
 }
