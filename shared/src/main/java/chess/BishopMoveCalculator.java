@@ -18,32 +18,7 @@ public class BishopMoveCalculator implements MoveCalculator {
     private List<ChessPosition> blacklist = new ArrayList<>();
 
     private void updateBlacklist(ChessPosition target, Direction offsetDirection) {
-        switch (offsetDirection) {
-            case POSITIVE_ROW_POSITIVE_COL: {
-                for (int i = target.getRow() + 1, j = target.getColumn() + 1; i <= 8 && j <= 8; i++, j++ ) {
-                    blacklist.add(new ChessPosition(i,j));
-                }
-                break;
-            }
-            case POSITIVE_ROW_NEGATIVE_COL: {
-                for (int i = target.getRow() + 1, j = target.getColumn() -1; i <= 8 && j >= 1; i++, j-- ) {
-                    blacklist.add(new ChessPosition(i,j));
-                }
-                break;
-            }
-            case NEGATIVE_ROW_NEGATIVE_COL: {
-                for (int i = target.getRow() - 1, j = target.getColumn() - 1; i >= 1 && j >= 1; i--, j-- ) {
-                    blacklist.add(new ChessPosition(i,j));
-                }
-                break;
-            }
-            case NEGATIVE_ROW_POSITIVE_COL: {
-                for (int i = target.getRow() - 1, j = target.getColumn() + 1; i >= 1 && j < 8; i--, j++ ) {
-                    blacklist.add(new ChessPosition(i,j));
-                }
-                break;
-            }
-        }
+        blacklist = updateBlacklistMaster(target,offsetDirection,blacklist);
     }
 
     @Override
@@ -71,10 +46,7 @@ public class BishopMoveCalculator implements MoveCalculator {
             }else {
                 moves.add(target);
             }
-
         }
-
-
         return moves;
     }
 }

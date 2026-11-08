@@ -17,32 +17,7 @@ public class RookMoveCalculator implements MoveCalculator {
     private List<ChessPosition> blacklist = new ArrayList<>();
 
     private void updateBlacklist(ChessPosition target, Direction offsetDirection) {
-        switch (offsetDirection) {
-            case POSITIVE_ROW: {
-                for (int i = target.getRow() + 1; i <= 8; i++) {
-                    blacklist.add(new ChessPosition(i,target.getColumn()));
-                }
-                break;
-            }
-            case NEGATIVE_COL: {
-                for (int i = target.getColumn() -1; i >= 1; i--) {
-                    blacklist.add(new ChessPosition(target.getRow(),i));
-                }
-                break;
-            }
-            case NEGATIVE_ROW: {
-                for (int i = target.getRow() - 1; i >= 1; i--) {
-                    blacklist.add(new ChessPosition(i, target.getColumn()));
-                }
-                break;
-            }
-            case POSITIVE_COL: {
-                for (int i = target.getColumn() + 1; i <= 8; i++ ) {
-                    blacklist.add(new ChessPosition(target.getRow(), i));
-                }
-                break;
-            }
-        }
+        blacklist = updateBlacklistMaster(target,offsetDirection,blacklist);
     }
 
     @Override
