@@ -16,26 +16,6 @@ public class BishopMoveCalculator implements MoveCalculator {
             {7,7},{7,-7},{-7,-7},{-7,7},
     };
     private List<ChessPosition> blacklist = new ArrayList<>();
-    private enum Direction{ POSITIVE_ROW_POSITIVE_COL, POSITIVE_ROW_NEGATIVE_COL,
-        NEGATIVE_ROW_NEGATIVE_COL, NEGATIVE_ROW_POSITIVE_COL}
-
-    private Direction findDirection(ChessPosition target, int[] offset) {
-        if (offset[0] > 0) {
-            if (offset[1] > 0) {
-                return Direction.POSITIVE_ROW_POSITIVE_COL;
-            }
-            else {
-                return Direction.POSITIVE_ROW_NEGATIVE_COL;
-            }
-        } else {
-            if (offset[1] > 0) {
-                return Direction.NEGATIVE_ROW_POSITIVE_COL;
-            }
-            else {
-                return Direction.NEGATIVE_ROW_NEGATIVE_COL;
-            }
-        }
-    }
 
     private void updateBlacklist(ChessPosition target, Direction offsetDirection) {
         switch (offsetDirection) {
@@ -72,7 +52,7 @@ public class BishopMoveCalculator implements MoveCalculator {
 
         for (int[] offset : offsets) {
             ChessPosition target =  position.addOffset(offset[0],offset[1]);
-            Direction offsetDirection = findDirection(target, offset);
+            Direction offsetDirection = omniDirectionalFindDirection(offset);
 
             if (target.getRow() > 8 || target.getColumn() > 8
                     || target.getRow() < 1 || target.getColumn() < 1) {

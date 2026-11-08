@@ -15,29 +15,6 @@ public class RookMoveCalculator implements MoveCalculator {
             {7,0},{0,-7},{-7,-0},{0,7},
     };
     private List<ChessPosition> blacklist = new ArrayList<>();
-    private enum Direction{ POSITIVE_ROW,NEGATIVE_COL,
-        NEGATIVE_ROW, POSITIVE_COL}
-
-    private Direction findDirection(ChessPosition target, int[] offset) {
-        if (offset[0] == 0) {
-            if (offset[1] > 0) {
-                return Direction.POSITIVE_COL;
-            }
-            else {
-                return Direction.NEGATIVE_COL;
-            }
-        } else {
-            if (offset[0] > 0) {
-                return Direction.POSITIVE_ROW;
-            }
-            else {
-                return Direction.NEGATIVE_ROW;
-            }
-        }
-
-
-
-    }
 
     private void updateBlacklist(ChessPosition target, Direction offsetDirection) {
         switch (offsetDirection) {
@@ -74,7 +51,7 @@ public class RookMoveCalculator implements MoveCalculator {
 
         for (int[] offset : offsets) {
             ChessPosition target =  position.addOffset(offset[0],offset[1]);
-            Direction offsetDirection = findDirection(target, offset);
+            Direction offsetDirection = omniDirectionalFindDirection(offset);
 
             if (target.getRow() > 8 || target.getColumn() > 8
                     || target.getRow() < 1 || target.getColumn() < 1) {

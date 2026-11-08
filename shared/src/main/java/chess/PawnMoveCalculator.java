@@ -11,12 +11,6 @@ public class PawnMoveCalculator implements MoveCalculator {
     private final int[][] starterOffsets = {{2,0},{-2,0}};
 
     private List<ChessPosition> blacklist = new ArrayList<>();
-    private enum Direction{
-        POSITIVE_ROW_POSITIVE_COL, POSITIVE_ROW_NEGATIVE_COL,
-        NEGATIVE_ROW_NEGATIVE_COL, NEGATIVE_ROW_POSITIVE_COL,
-        POSITIVE_ROW,NEGATIVE_COL,
-        NEGATIVE_ROW, POSITIVE_COL
-    }
 
     private int[][] addStarterOffset(int[][] offsets, int[] starterOffset) {
         List<int[]> tempList = new ArrayList<>();
@@ -27,35 +21,6 @@ public class PawnMoveCalculator implements MoveCalculator {
         tempList.add(starterOffset);
 
         return tempList.toArray(new int[0][]);
-    }
-
-    private Direction findDirection(ChessPosition target, int[] offset) {
-        if (offset[0] > 0) {
-            if (offset[1] > 0) {
-                return Direction.POSITIVE_ROW_POSITIVE_COL;
-            }
-            else if (offset[1] < 0) {
-                return Direction.POSITIVE_ROW_NEGATIVE_COL;
-            }
-            else {
-                return Direction.POSITIVE_ROW;
-            }
-        } else if (offset[0] < 0) {
-            if (offset[1] > 0) {
-                return Direction.NEGATIVE_ROW_POSITIVE_COL;
-            }
-            else if (offset[1] < 0) {
-                return Direction.NEGATIVE_ROW_NEGATIVE_COL;
-            }
-            else {
-                return Direction.NEGATIVE_ROW;
-            }
-        } else {
-            if (offset[1] > 0) {
-                return Direction.POSITIVE_COL;
-            }
-            return Direction.NEGATIVE_COL;
-        }
     }
 
     private void updateBlacklist(ChessPosition target, Direction offsetDirection, ChessBoard board) {
@@ -100,7 +65,7 @@ public class PawnMoveCalculator implements MoveCalculator {
 
         for (int[] offset : offsets) {
             ChessPosition target =  position.addOffset(offset[0],offset[1]);
-            Direction offsetDirection = findDirection(target, offset);
+            Direction offsetDirection = omniDirectionalFindDirection(offset);
 
             if (target.getRow() > 8 || target.getColumn() > 8
                     || target.getRow() < 1 || target.getColumn() < 1) {
