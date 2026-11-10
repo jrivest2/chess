@@ -24,6 +24,30 @@ public class MemoryGameDAO implements GameDAO {
     }
 
     @Override
+    public void joinGame(String playerColor, int gameID, String userName) {
+        String gameIDString = String.valueOf(gameID);
+        GameData current = gameDataTable.get(gameIDString);
+        if (playerColor.equals("white")) {
+            GameData newGame = new GameData(gameID, userName, current.blackUsername(), current.gameName(), current.game());
+            gameDataTable.put(gameIDString, newGame);
+        } else {
+            GameData newGame = new GameData(gameID, current.whiteUsername(), userName, current.gameName(), current.game());
+            gameDataTable.put(gameIDString, newGame);
+        }
+    }
+
+    @Override
+    public GameData getGame(int gameID) {
+        String gameIDString = String.valueOf(gameID);
+        return gameDataTable.get(gameIDString);
+    }
+
+    @Override
+    public HashMap<String, GameData> listGames() {
+        return gameDataTable;
+    }
+
+    @Override
     public void clearDB() {
         gameDataTable.clear();
     }

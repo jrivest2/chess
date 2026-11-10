@@ -3,7 +3,7 @@ package service;
 import dataaccess.*;
 import model.*;
 
-import java.util.Objects;
+import java.util.*;
 
 public class UserService {
     UserDAO userDao = new MemoryUserDAO();
@@ -85,5 +85,52 @@ public class UserService {
         } else {
             throw new IncorrectCredentialsException("Error: unauthorized");
         }
+    }
+
+    public ListGameResult listGames(String authToken) {
+        if (authToken == null) {
+            throw new IncorrectCredentialsException("Error: unauthorized");
+        }
+        AuthData auth = authDao.getAuth(authToken);
+        if (auth == null) {
+            throw new IncorrectCredentialsException("Error: unauthorized");
+        }
+        HashMap<String, GameData> dataTable = gameDao.listGames();
+        ArrayList<GameData> data = new ArrayList<>();
+        for (String i : dataTable.keySet()) {
+            data.add(dataTable.get(i));
+        }
+        return new ListGameResult(data);
+    }
+
+    public void joinGame(JoinGameRequest request) {
+        if (request.authToken() == null) {
+            throw new IncorrectCredentialsException("Error: unauthorized");
+        }
+        AuthData auth = authDao.getAuth(request.authToken());
+        if (auth != null) {
+            GameData game = gameDao.getGame(request.gameID());
+            String cleansedPlayerColor;
+            if (request.playerColor() == null) {
+                throw new InvalidArgumentException("Error: Invalid Input");
+            }
+           cleansedPlayerColor = request.playerColor().toLowerCase(Locale.ROOT);
+            if (game == null || (!cleansedPlayerColor.equals("white")
+                    && !cleansedPlayerColor.equals("black"))) {
+                throw new InvalidArgumentException("Error: Invalid Input");
+            } else if (isPlayerColorTaken(cleansedPlayerColor,game)) {
+                throw new AlreadyTakenException("Error: already taken");
+            }
+            gameDao.joinGame(cleansedPlayerColor, game.gameID(), auth.username());
+        } else {
+            throw new IncorrectCredentialsException("Error: unauthorized");
+        }
+    }
+
+    private boolean isPlayerColorTaken(String playerColor, GameData game) {
+        if (playerColor.equals("white")) {
+            return !(game.whiteUsername() == null) && !game.whiteUsername().isEmpty() && !game.whiteUsername().isBlank();
+        }
+        return !(game.blackUsername() == null) && !game.blackUsername().isEmpty() && !game.blackUsername().isBlank();
     }
 }

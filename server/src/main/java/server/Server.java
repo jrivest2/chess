@@ -24,7 +24,41 @@ public class Server {
         javalin.post("/session", this::login);
         javalin.delete("/session", this::logout);
         javalin.post("/game", this::createGame);
+        javalin.get("/game", this::listGames);
+        javalin.put("/game", this::joinGame);
         javalin.delete("/db", this::clearDB);
+    }
+
+    private void joinGame(Context ctx) {
+        ctx.contentType("application/json");
+        String token = ctx.header("Authorization");
+        JoinGameRequest temp = new Gson().fromJson(ctx.body(),JoinGameRequest.class);
+        JoinGameRequest request = new JoinGameRequest(token, temp.playerColor(), temp.gameID());
+        try {
+            userService.joinGame(request);
+            ctx.result("{}");
+        } catch (InvalidArgumentException e) {
+            ctx.status(400);
+            ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        } catch (IncorrectCredentialsException e) {
+            ctx.status(401);
+            ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        } catch (AlreadyTakenException e) {
+            ctx.status(403);
+            ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        }
+    }
+
+    private void listGames(Context ctx) {
+        ctx.contentType("application/json");
+        String token = ctx.header("Authorization");
+        try {
+            ListGameResult result = userService.listGames(token);
+            ctx.result(new Gson().toJson(result));
+        } catch (Exception e) {
+            ctx.status(401);
+            ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        }
     }
 
     private void createGame(Context ctx) {
