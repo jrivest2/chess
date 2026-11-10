@@ -60,7 +60,8 @@ public interface MoveCalculator {
         return moves;
     }
 
-    default List<ChessPosition> validMovesSliders(ChessPosition position, ChessBoard board, int[][] offsets, List<ChessPosition> moves, List<ChessPosition> blacklist) {
+    default List<ChessPosition> validMovesSliders(ChessPosition position, ChessBoard board, int[][] offsets,
+                                                  List<ChessPosition> moves, List<ChessPosition> blacklist) {
         ChessPiece piece = board.getPiece(position);
 
         for (int[] offset : offsets) {
