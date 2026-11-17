@@ -18,7 +18,7 @@ public class SqlDAOTests {
     }
 
     @Test
-    public void SQLTest()  {
+    public void SqlTest()  {
         try {
             CreateGameTest createGameTest = new CreateGameTest();
             createGameTest.successfulTest();
