@@ -39,7 +39,8 @@ public class SqlGameDAO implements GameDAO {
         int gameID = rand.nextInt((10000 - 1) + 1) + 1;
 
         try (var conn = DatabaseManager.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement("INSERT into GameData (gameID,gameName,game,whiteUsername,blackUsername) VALUES (?,?,?,?,?);")) {
+            try (var preparedStatement = conn.prepareStatement("INSERT into GameData " +
+                    "(gameID,gameName,game,whiteUsername,blackUsername) VALUES (?,?,?,?,?);")) {
                 preparedStatement.setInt(1, gameID);
                 preparedStatement.setString(2, gameName);
                 preparedStatement.setString(3, new Gson().toJson(new ChessGame()));

@@ -136,8 +136,9 @@ public class UserService {
 
     private boolean isPlayerColorTaken(String playerColor, GameData game) {
         if (playerColor.equals("white")) {
-            return !(game.whiteUsername() == null) && !game.whiteUsername().isEmpty() && !game.whiteUsername().isBlank()&& !game.whiteUsername().equals("null");
+            return !(game.whiteUsername() == null) && !game.whiteUsername().isEmpty() && !game.whiteUsername().isBlank();
         }
-        return !(game.blackUsername() == null) && !game.blackUsername().isEmpty() && !game.blackUsername().isBlank() && !game.blackUsername().equals("null");
+        return !(game.blackUsername() == null)
+                && !game.blackUsername().isEmpty() && !game.blackUsername().isBlank();
     }
 }

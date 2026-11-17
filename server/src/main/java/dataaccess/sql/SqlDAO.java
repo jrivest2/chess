@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public interface SqlDAO {
-    String[] createStatements = {
+    String[] CREATE_STATEMENTS = {
             """
             CREATE TABLE IF NOT EXISTS  UserData (
               `username` varchar(256) NOT NULL,
@@ -43,13 +43,13 @@ public interface SqlDAO {
     default void configureDatabase() throws ResponseException, DataAccessException {
         DatabaseManager.createDatabase();
         try (Connection conn = DatabaseManager.getConnection()) {
-            for (String statement : createStatements) {
+            for (String statement : CREATE_STATEMENTS) {
                 try (var preparedStatement = conn.prepareStatement(statement)) {
                     preparedStatement.executeUpdate();
                 }
             }
         } catch (SQLException ex) {
-            throw new ResponseException(ResponseException.Code.ServerError, String.format("Unable to configure database: %s", ex.getMessage()));
+            throw new ResponseException(String.format("Unable to configure database: %s", ex.getMessage()));
         }
     }
 }

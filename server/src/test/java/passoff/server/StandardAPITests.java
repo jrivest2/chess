@@ -21,7 +21,6 @@ public class StandardAPITests {
     private String existingAuth;
 
     // ### TESTING SETUP/CLEANUP ###
-
     @AfterAll
     static void stopServer() {
         server.stop();
