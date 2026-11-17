@@ -1,6 +1,7 @@
 package server;
 
 import dataaccess.DataAccessException;
+import dataaccess.ServerIssueException;
 import dataaccess.sql.ResponseException;
 import service.InvalidArgumentException;
 import service.UserService;
@@ -18,17 +19,17 @@ public class Server {
     UserService userService = new UserService();
     private final Javalin javalin;
 
-    public Server() throws ResponseException, DataAccessException {
+    public Server() throws ResponseException, DataAccessException, ServerIssueException {
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
-        // Register your endpoints and exception handlers here.
-        javalin.post("/user", this::addUser);
-        javalin.post("/session", this::login);
-        javalin.delete("/session", this::logout);
-        javalin.post("/game", this::createGame);
-        javalin.get("/game", this::listGames);
-        javalin.put("/game", this::joinGame);
-        javalin.delete("/db", this::clearDB);
+            // Register your endpoints and exception handlers here.
+            javalin.post("/user", this::addUser);
+            javalin.post("/session", this::login);
+            javalin.delete("/session", this::logout);
+            javalin.post("/game", this::createGame);
+            javalin.get("/game", this::listGames);
+            javalin.put("/game", this::joinGame);
+            javalin.delete("/db", this::clearDB);
     }
 
     private void joinGame(Context ctx) {
@@ -48,6 +49,9 @@ public class Server {
         } catch (AlreadyTakenException e) {
             ctx.status(403);
             ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        } catch (Exception e) {
+            ctx.status(500);
+            ctx.result(new Gson().toJson(Map.of("message", "Error: " + e.getMessage())));
         }
     }
 
@@ -57,9 +61,12 @@ public class Server {
         try {
             ListGameResult result = userService.listGames(token);
             ctx.result(new Gson().toJson(result));
-        } catch (Exception e) {
+        }  catch (IncorrectCredentialsException e) {
             ctx.status(401);
             ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        } catch (Exception e) {
+            ctx.status(500);
+            ctx.result(new Gson().toJson(Map.of("message", "Error: " + e.getMessage())));
         }
     }
 
@@ -77,6 +84,9 @@ public class Server {
         } catch (IncorrectCredentialsException e) {
             ctx.status(401);
             ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        } catch (Exception e) {
+            ctx.status(500);
+            ctx.result(new Gson().toJson(Map.of("message", "Error: " + e.getMessage())));
         }
     }
 
@@ -88,9 +98,12 @@ public class Server {
             userService.logout(request);
             ctx.status(200);
             ctx.result("{}");
-        } catch (Exception e) {
+        } catch (IncorrectCredentialsException e) {
             ctx.status(401);
             ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        } catch (Exception e) {
+            ctx.status(500);
+            ctx.result(new Gson().toJson(Map.of("message", "Error: " + e.getMessage())));
         }
     }
     //Login Endpoint
@@ -106,6 +119,9 @@ public class Server {
         } catch (InvalidArgumentException e) {
             ctx.status(400);
             ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        } catch (Exception e) {
+            ctx.status(500);
+            ctx.result(new Gson().toJson(Map.of("message", "Error: " + e.getMessage())));
         }
     }
     //Clear Endpoint
@@ -115,7 +131,8 @@ public class Server {
             userService.clearDB();
         } catch (Exception e) {
             ctx.status(500);
-            ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));        }
+            ctx.result(new Gson().toJson(Map.of("message", "Error: " + e.getMessage())));
+        }
     }
     //Register Endpoint
     public void addUser(Context ctx) {
@@ -130,6 +147,9 @@ public class Server {
         } catch (InvalidArgumentException e) {
             ctx.status(400);
             ctx.result(new Gson().toJson(Map.of("message", e.getMessage())));
+        } catch (Exception e) {
+            ctx.status(500);
+            ctx.result(new Gson().toJson(Map.of("message", "Error: " + e.getMessage())));
         }
 
     }

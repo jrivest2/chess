@@ -3,13 +3,11 @@ package dataaccess.sql;
 import dataaccess.*;
 import model.RegisterRequest;
 import model.UserData;
+import org.mindrot.jbcrypt.BCrypt;
 
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.HashMap;
 
 public class SqlUserDAO implements UserDAO, SqlDAO {
-    static HashMap<String, UserData> userDataTable = new HashMap<>();
     public SqlUserDAO() throws ResponseException, DataAccessException {
         this.configureDatabase();
     }
@@ -27,7 +25,8 @@ public class SqlUserDAO implements UserDAO, SqlDAO {
                 throw new RuntimeException("Error: Unauthorized");
             }
         } catch (DataAccessException e) {
-            throw new ServerIssueException("Error: There was an issue in the Server. If the Issue persists, please contact support.");
+//            throw new ServerIssueException("Error: There was an issue in the Server. If the Issue persists, please contact support.");
+            throw new ServerIssueException(e.getMessage());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -38,7 +37,8 @@ public class SqlUserDAO implements UserDAO, SqlDAO {
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("INSERT into userdata (username,password,email) VALUES (?,?,?);")) {
                 preparedStatement.setString(1, registerRequest.username());
-                preparedStatement.setString(2, registerRequest.password());
+                String password = BCrypt.hashpw(registerRequest.password(), BCrypt.gensalt());
+                preparedStatement.setString(2, password);
                 preparedStatement.setString(3, registerRequest.email());
                 preparedStatement.executeUpdate();
 
@@ -57,7 +57,7 @@ public class SqlUserDAO implements UserDAO, SqlDAO {
 
     @Override
     public int getSize() {
-        int result = -1;
+        int result;
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("SELECT COUNT(*) AS row_count FROM UserData;")) {
                 var rs = preparedStatement.executeQuery();

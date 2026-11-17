@@ -2,16 +2,19 @@ package service;
 
 import dataaccess.*;
 import dataaccess.sql.ResponseException;
+import dataaccess.sql.SqlAuthDAO;
+import dataaccess.sql.SqlGameDAO;
 import dataaccess.sql.SqlUserDAO;
 import model.*;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.*;
 
 public class UserService {
     UserDAO userDao = new SqlUserDAO();
 
-    AuthDAO authDao = new MemoryAuthDAO();
-    GameDAO gameDao = new MemoryGameDAO();
+    AuthDAO authDao = new SqlAuthDAO();
+    GameDAO gameDao = new SqlGameDAO();
 
     public UserService() throws ResponseException, DataAccessException {
     }
@@ -53,10 +56,7 @@ public class UserService {
         if (user == null) {
             throw new IncorrectCredentialsException("Error: unauthorized");
         }
-        if (authDao.getAuth(request.username()) != null) {
-            throw new IncorrectCredentialsException("Already Logged In");
-        }
-        if (Objects.equals(user.password(), request.password())) {
+        if (BCrypt.checkpw(request.password(),user.password())) {
             String authToken = authDao.createAuth(user.username());
             return new LoginResult(user.username(), authToken);
         } else {
@@ -136,8 +136,8 @@ public class UserService {
 
     private boolean isPlayerColorTaken(String playerColor, GameData game) {
         if (playerColor.equals("white")) {
-            return !(game.whiteUsername() == null) && !game.whiteUsername().isEmpty() && !game.whiteUsername().isBlank();
+            return !(game.whiteUsername() == null) && !game.whiteUsername().isEmpty() && !game.whiteUsername().isBlank()&& !game.whiteUsername().equals("null");
         }
-        return !(game.blackUsername() == null) && !game.blackUsername().isEmpty() && !game.blackUsername().isBlank();
+        return !(game.blackUsername() == null) && !game.blackUsername().isEmpty() && !game.blackUsername().isBlank() && !game.blackUsername().equals("null");
     }
 }
