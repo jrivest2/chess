@@ -1,7 +1,6 @@
 package service;
 
 import dataaccess.*;
-import dataaccess.sql.ResponseException;
 import dataaccess.sql.SqlAuthDAO;
 import dataaccess.sql.SqlGameDAO;
 import dataaccess.sql.SqlUserDAO;
@@ -16,7 +15,7 @@ public class UserService {
     AuthDAO authDao = new SqlAuthDAO();
     GameDAO gameDao = new SqlGameDAO();
 
-    public UserService() throws ResponseException, DataAccessException {
+    public UserService() throws DataAccessException {
     }
 
     public int[] getDBSizes() {

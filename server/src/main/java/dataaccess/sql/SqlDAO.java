@@ -40,7 +40,7 @@ public interface SqlDAO {
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
     };
-    default void configureDatabase() throws ResponseException, DataAccessException {
+    default void configureDatabase() throws DataAccessException {
         DatabaseManager.createDatabase();
         try (Connection conn = DatabaseManager.getConnection()) {
             for (String statement : CREATE_STATEMENTS) {
@@ -49,7 +49,7 @@ public interface SqlDAO {
                 }
             }
         } catch (SQLException ex) {
-            throw new ResponseException(String.format("Unable to configure database: %s", ex.getMessage()));
+            throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
         }
     }
 }

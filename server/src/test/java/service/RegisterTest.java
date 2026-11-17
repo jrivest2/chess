@@ -2,7 +2,6 @@ package service;
 
 import dataaccess.AlreadyTakenException;
 import dataaccess.DataAccessException;
-import dataaccess.sql.ResponseException;
 import model.RegisterRequest;
 import model.RegisterResult;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RegisterTest {
     UserService userService = new UserService();
 
-    public RegisterTest() throws ResponseException, DataAccessException {
+    public RegisterTest() throws DataAccessException {
     }
 
     @BeforeEach

@@ -2,7 +2,6 @@ package service;
 
 import dataaccess.DataAccessException;
 import dataaccess.IncorrectCredentialsException;
-import dataaccess.sql.ResponseException;
 import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,11 +11,20 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class JoinGameTest {
-    UserService userService = new UserService();
+    UserService userService;
+
+    {
+        try {
+            userService = new UserService();
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     String authToken;
     int gameID;
 
-    public JoinGameTest() throws ResponseException, DataAccessException {
+    public JoinGameTest() {
     }
 
     @BeforeEach

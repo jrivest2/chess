@@ -2,7 +2,6 @@ package service;
 
 import dataaccess.DataAccessException;
 import dataaccess.IncorrectCredentialsException;
-import dataaccess.sql.ResponseException;
 import model.CreateGameRequest;
 import model.RegisterRequest;
 import model.RegisterResult;
@@ -15,7 +14,7 @@ public class ListGameTest {
     UserService userService = new UserService();
     String authToken;
 
-    public ListGameTest() throws ResponseException, DataAccessException {
+    public ListGameTest() throws DataAccessException {
     }
 
     @BeforeEach

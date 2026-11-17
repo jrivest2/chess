@@ -1,7 +1,6 @@
 package service;
 
 import dataaccess.DataAccessException;
-import dataaccess.sql.ResponseException;
 import model.CreateGameRequest;
 import model.RegisterRequest;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ClearTest {
     UserService userService = new UserService();
 
-    public ClearTest() throws ResponseException, DataAccessException {
+    public ClearTest() throws DataAccessException {
     }
 
     @BeforeEach

@@ -1,11 +1,7 @@
 package server;
 
-import chess.*;
-import dataaccess.DataAccessException;
-import dataaccess.sql.ResponseException;
-
 public class ServerMain {
-    public static void main(String[] args) throws ResponseException, DataAccessException {
+    public static void main(String[] args) {
 //        var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
         var port = 8080;
         Server server = new Server();
