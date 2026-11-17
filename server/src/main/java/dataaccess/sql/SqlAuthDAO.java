@@ -2,14 +2,11 @@ package dataaccess.sql;
 
 import dataaccess.*;
 import model.AuthData;
-import model.UserData;
 
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.UUID;
 
 public class SqlAuthDAO implements AuthDAO {
-    static HashMap<String, AuthData> authDataTable = new HashMap<>();
     @Override
     public String createAuth(String username) {
         String authToken = UUID.randomUUID().toString();
@@ -54,7 +51,7 @@ public class SqlAuthDAO implements AuthDAO {
 
     @Override
     public int getSize() {
-        int result = -1;
+        int result;
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement("SELECT COUNT(*) AS row_count FROM AuthData;")) {
                 var rs = preparedStatement.executeQuery();
@@ -89,11 +86,11 @@ public class SqlAuthDAO implements AuthDAO {
     @Override
     public void deleteAuth(String authToken) {
         try (var conn = DatabaseManager.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement("DELETE * from AuthData where authToken = ?;")) {
+            try (var preparedStatement = conn.prepareStatement("DELETE from AuthData where authToken = ?;")) {
                 preparedStatement.setString(1, authToken);
-                preparedStatement.executeQuery();
+                preparedStatement.executeUpdate();
             } catch (SQLException e) {
-                throw new RuntimeException("Error: Unauthorized");
+                throw new RuntimeException(e);
             }
         } catch (DataAccessException e) {
             throw new ServerIssueException("Error: There was an issue in the Server. If the Issue persists, please contact support.");
