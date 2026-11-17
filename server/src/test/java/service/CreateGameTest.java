@@ -1,6 +1,8 @@
 package service;
 
+import dataaccess.DataAccessException;
 import dataaccess.IncorrectCredentialsException;
+import dataaccess.sql.ResponseException;
 import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class CreateGameTest {
     UserService userService = new UserService();
+
+    public CreateGameTest() throws ResponseException, DataAccessException {
+    }
 
     @BeforeEach
     public void setup() {

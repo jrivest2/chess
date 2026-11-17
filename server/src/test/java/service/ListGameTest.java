@@ -1,6 +1,8 @@
 package service;
 
+import dataaccess.DataAccessException;
 import dataaccess.IncorrectCredentialsException;
+import dataaccess.sql.ResponseException;
 import model.CreateGameRequest;
 import model.RegisterRequest;
 import model.RegisterResult;
@@ -12,6 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ListGameTest {
     UserService userService = new UserService();
     String authToken;
+
+    public ListGameTest() throws ResponseException, DataAccessException {
+    }
 
     @BeforeEach
     public void setup() {

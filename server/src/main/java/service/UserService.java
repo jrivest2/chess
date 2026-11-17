@@ -1,14 +1,21 @@
 package service;
 
 import dataaccess.*;
+import dataaccess.sql.ResponseException;
+import dataaccess.sql.SqlUserDAO;
 import model.*;
 
 import java.util.*;
 
 public class UserService {
-    UserDAO userDao = new MemoryUserDAO();
+    UserDAO userDao = new SqlUserDAO();
+
     AuthDAO authDao = new MemoryAuthDAO();
     GameDAO gameDao = new MemoryGameDAO();
+
+    public UserService() throws ResponseException, DataAccessException {
+    }
+
     public int[] getDBSizes() {
         return new int[]{userDao.getSize(),authDao.getSize(),gameDao.getSize()};
     }

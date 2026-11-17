@@ -1,5 +1,7 @@
 package server;
 
+import dataaccess.DataAccessException;
+import dataaccess.sql.ResponseException;
 import service.InvalidArgumentException;
 import service.UserService;
 import com.google.gson.Gson;
@@ -16,7 +18,7 @@ public class Server {
     UserService userService = new UserService();
     private final Javalin javalin;
 
-    public Server() {
+    public Server() throws ResponseException, DataAccessException {
         javalin = Javalin.create(config -> config.staticFiles.add("web"));
 
         // Register your endpoints and exception handlers here.

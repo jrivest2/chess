@@ -1,6 +1,8 @@
 package service;
 
+import dataaccess.DataAccessException;
 import dataaccess.IncorrectCredentialsException;
+import dataaccess.sql.ResponseException;
 import model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +15,10 @@ public class LoginLogoutTest {
     RegisterRequest test;
     RegisterResult result;
     String registerToken;
+
+    public LoginLogoutTest() throws ResponseException, DataAccessException {
+    }
+
     @BeforeEach
     public void setup() {
         userService.clearDB();
