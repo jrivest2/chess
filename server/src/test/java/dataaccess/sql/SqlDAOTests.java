@@ -6,10 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.*;
 
-public class SQLDAOTests {
+public class SqlDAOTests {
         UserService userService = new UserService();
 
-    public SQLDAOTests() throws DataAccessException {
+    public SqlDAOTests() throws DataAccessException {
     }
 
     @BeforeEach
