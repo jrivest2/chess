@@ -28,15 +28,15 @@ public class CommandManager {
     private String list() {
         return "IMPLEMENT THIS";
     }
-    private String create(String[] strings) {
+    private String create(String[] params) {
         return "IMPLEMENT THIS";
     }
 
-    private String login(String[] strings) {
+    private String login(String[] params) {
         return "IMPLEMENT THIS";
     }
 
-    private String register(String[] strings) {
+    private String register(String[] params) {
         return "IMPLEMENT THIS";
     }
 
