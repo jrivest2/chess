@@ -1,5 +1,7 @@
 package client;
 
+import ui.ConsoleView;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
