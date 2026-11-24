@@ -18,7 +18,7 @@ public class Repl {
         this.commandManager = new CommandManager((params)->{
             state = State.QUIT;
             return "";
-        });
+        }, this.serverFacade);
     }
 
     public void run(Scanner scanner) {

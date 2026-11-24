@@ -4,8 +4,9 @@ import java.util.HashMap;
 
 public class CommandManager {
     private final HashMap<String, Command> commands = new HashMap<>();
+    private final ServerFacade serverFacade;
 
-    public CommandManager(CommandHandler quitFunc) {
+    public CommandManager(CommandHandler quitFunc, ServerFacade serverFacade) {
         commands.put("register", new Command(3, "Expected: <username> <password> <email>", this::register));
         commands.put("login", new Command(2, "Expected: <username> <password>", this::login));
         commands.put("create", new Command(1, "Expected: <name of new game>", this::create));
@@ -14,6 +15,7 @@ public class CommandManager {
         commands.put("observe", new Command(0, "", params -> observe()));
         commands.put("help", new Command(0, "", params -> help()));
         commands.put("quit", new Command(0, "", quitFunc));
+        this.serverFacade = serverFacade;
     }
 
     private String help() {
@@ -33,6 +35,7 @@ public class CommandManager {
     }
 
     private String login(String[] params) {
+        serverFacade.login(params);
         return "IMPLEMENT THIS";
     }
 
