@@ -41,7 +41,7 @@ public class CommandManager {
     }
 
     public Command get(String name) {
-        return commands.get(name) == null ? commands.get(name) : commands.get("help");
+        return commands.get(name) == null ? commands.get("help") : commands.get(name);
     }
 
 }
