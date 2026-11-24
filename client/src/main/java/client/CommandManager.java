@@ -16,6 +16,30 @@ public class CommandManager {
         commands.put("quit", new Command(0, "", quitFunc));
     }
 
+    private String help() {
+        return "IMPLEMENT THIS";
+    }
+    private String observe() {
+        return "IMPLEMENT THIS";
+    }
+    private String logout() {
+        return "IMPLEMENT THIS";
+    }
+    private String list() {
+        return "IMPLEMENT THIS";
+    }
+    private String create(String[] strings) {
+        return "IMPLEMENT THIS";
+    }
+
+    private String login(String[] strings) {
+        return "IMPLEMENT THIS";
+    }
+
+    private String register(String[] strings) {
+        return "IMPLEMENT THIS";
+    }
+
     public Command get(String name) {
         return commands.get(name) == null ? commands.get(name) : commands.get("help");
     }
