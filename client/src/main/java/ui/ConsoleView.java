@@ -1,5 +1,7 @@
 package ui;
 
+import chess.ChessGame;
+
 import java.io.PrintStream;
 
 public class ConsoleView {
@@ -11,7 +13,8 @@ public class ConsoleView {
     }
 
     public void welcome() {
-        print(EscapeSequences.BLACK_KING + " Welcome to Chess!\nTry \"login <username> <password>\" or ask for \"help\".\n");
+        print(EscapeSequences.BLACK_KING + " Welcome to Chess! " + EscapeSequences.BLACK_KING
+                + "\nTry \"login <username> <password>\" or ask for \"help\".\n");
         printPrompt(EscapeSequences.RESET_TEXT_COLOR, "");
     }
 
@@ -28,10 +31,26 @@ public class ConsoleView {
     }
 
     public void quit() {
-        print(EscapeSequences.SET_TEXT_COLOR_GREEN + "Goodbye!\n" + EscapeSequences.RESET_TEXT_COLOR);
+        print(EscapeSequences.SET_TEXT_COLOR_GREEN + "Goodbye! " + EscapeSequences.WHITE_KING + "\n" + EscapeSequences.RESET_TEXT_COLOR);
     }
 
 
+    public void drawBoard(ChessGame game, ChessGame.TeamColor perspective) {
+        System.out.flush();
+        print(EscapeSequences.SET_BG_COLOR_DARK_GREEN + EscapeSequences.EMPTY);
+
+        resetColors();
+        System.out.print('\n');
+    }
+
+    private void resetColors() {
+        print(EscapeSequences.RESET_TEXT_COLOR
+                + EscapeSequences.RESET_BG_COLOR
+                + EscapeSequences.RESET_TEXT_BLINKING
+                + EscapeSequences.RESET_TEXT_BOLD_FAINT
+                + EscapeSequences.RESET_TEXT_ITALIC
+                + EscapeSequences.RESET_TEXT_UNDERLINE + "> ");
+    }
 
     private void printPrompt(String color, String message) {
         print(color + message);
