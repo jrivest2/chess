@@ -42,6 +42,7 @@ public class ConsoleView {
         ChessBoard board = game.getBoard();
         String[] letters = {"\u2001","a "," b ","  c ","  d  "," e ",
                 "  f ","\u2001g ","\u2001 h ","\u2001"};
+        int[] nums = {9,8,7,6,5,4,3,2,1,0};
         int modular;
         if (perspective == ChessGame.TeamColor.WHITE) {modular = 0;}
         else {modular = 1;}
@@ -64,7 +65,7 @@ public class ConsoleView {
                             print(letters[j]);
                         }
                     } else if (j == 0 || j == 9) {
-                        print("\u2001" + String.valueOf(i) + "\u2001");
+                        print("\u2001" + String.valueOf(nums[i]) + "\u2001");
                     } else if (board.getPiece(new ChessPosition(i, j)) == null) {
                         print(EscapeSequences.EMPTY);
                         resetColors();
@@ -139,7 +140,7 @@ public class ConsoleView {
                             print(letters[j]);
                         }
                     } else if (j == 0 || j == 9) {
-                        print("\u2001" + String.valueOf(i) + "\u2001");
+                        print("\u2001" + String.valueOf(nums[i]) + "\u2001");
                     } else if (board.getPiece(new ChessPosition(i, j)) == null) {
                         print(EscapeSequences.EMPTY);
                         resetColors();
