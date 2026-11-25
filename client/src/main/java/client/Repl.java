@@ -15,10 +15,10 @@ public class Repl {
     public Repl(ServerFacade serverFacade, ConsoleView view) {
         this.serverFacade = serverFacade;
         this.view = view;
-        this.commandManager = new CommandManager((params)->{
+        this.commandManager = new CommandManager(params->{
             state = State.QUIT;
             return "";
-        }, this.serverFacade);
+        }, this.serverFacade, this.view);
     }
 
     public void run(Scanner scanner) {
