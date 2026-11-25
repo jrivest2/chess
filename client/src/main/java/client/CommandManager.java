@@ -31,13 +31,21 @@ public class CommandManager {
         this.view = view;
     }
 
-    private String join(String[] params) {
-        GameData game = gameList.get(Integer.parseInt(params[0]));
+    private String join(String[] params) throws ResponseException {
+        GameData game;
+        try {
+            game = gameList.get(Integer.parseInt(params[0])-1);
+        } catch (Exception e) {
+            throw new ResponseException(ResponseException.Code.ClientError,"The Game ID needs to be a number");
+        }
         if (Objects.equals(params[1], "white")) {
             view.drawBoard(game.game(), ChessGame.TeamColor.WHITE);
         } else if (params[1].equals("black")) {
             view.drawBoard(game.game(), ChessGame.TeamColor.BLACK);
+        } else {
+            throw new ResponseException(ResponseException.Code.ClientError,"The Team Color needs to be \"white\" or \"black\"");
         }
+        serverFacade.join(params[1],game.gameID());
         return "IMPLEMENT THIS";
     }
     private String observe(String[] params) {

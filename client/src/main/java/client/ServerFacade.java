@@ -108,10 +108,16 @@ public class ServerFacade {
         var request = buildRequest("POST", "/game", gson.toJson(input));
         var response = sendRequest(request);
         return handleResponse(response, CreateGameResult.class);
-
     }
 
     public boolean isSignedIn() {
         return authToken != null;
+    }
+
+    public void join(String color, int gameID) throws ResponseException {
+       JoinGameRequest input = new JoinGameRequest(authToken,color,gameID);
+        var request = buildRequest("PUT", "/game", gson.toJson(input));
+        var response = sendRequest(request);
+        handleResponse(response, null);
     }
 }
