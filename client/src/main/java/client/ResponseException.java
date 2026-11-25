@@ -10,6 +10,7 @@ public class ResponseException extends Exception {
     public enum Code {
         ServerError,
         ClientError,
+        AuthError,
         NotFound,
     }
 
@@ -50,6 +51,7 @@ public class ResponseException extends Exception {
             case ServerError -> 500;
             case ClientError -> 400;
             case NotFound -> 404;
+            case AuthError -> 401;
         };
     }
 }

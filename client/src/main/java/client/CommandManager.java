@@ -48,9 +48,14 @@ public class CommandManager {
         serverFacade.join(params[1],game.gameID());
         return "IMPLEMENT THIS";
     }
-    private String observe(String[] params) {
-        GameData game = gameList.get(Integer.parseInt(params[0]));
-        view.drawBoard(game.game(), ChessGame.TeamColor.WHITE);
+    private String observe(String[] params) throws ResponseException {
+        GameData game;
+        try {
+            game = gameList.get(Integer.parseInt(params[0])-1);
+        } catch (Exception e) {
+            throw new ResponseException(ResponseException.Code.ClientError,
+                    "The Game ID needs to be a number");
+        }        view.drawBoard(game.game(), ChessGame.TeamColor.WHITE);
         return "Enjoy the game!";
     }
 
@@ -77,11 +82,25 @@ public class CommandManager {
         return "You have logged out successfully.";
     }
     private String list() throws ResponseException {
-        ListGameResult list = serverFacade.list();
+        ListGameResult list;
+        try {
+            list = serverFacade.list();
+        } catch (Exception e) {
+            if (e.getMessage().contains("401")){
+                throw new ResponseException(ResponseException.Code.AuthError,"Unauthorized. Please login");
+            }
+            throw new ResponseException(ResponseException.Code.ServerError,
+                    "Something went wrong with the server. Please try again later");
+        }
         this.gameList = list.games();
         if (list.games().isEmpty()) {
             return "No games available at the moment.";
         }
+        var result = buildList(list);
+        return result.toString();
+    }
+
+    private StringBuilder buildList(ListGameResult list) {
         var result = new StringBuilder();
         for (int i = 0; i < list.games().size(); i++) {
             GameData game = list.games().get(i);
@@ -91,8 +110,9 @@ public class CommandManager {
                     blackUser));
             if (i + 1 != list.games().size()) result.append("\n");
         }
-        return result.toString();
+        return result;
     }
+
     private String create(String[] params) throws ResponseException {
         serverFacade.create(params);
         return "Game " + params[0] + " created.";
