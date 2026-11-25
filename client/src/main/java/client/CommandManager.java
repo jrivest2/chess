@@ -43,7 +43,7 @@ public class CommandManager {
     private String observe(String[] params) {
         GameData game = gameList.get(Integer.parseInt(params[0]));
         view.drawBoard(game.game(), ChessGame.TeamColor.WHITE);
-        return "IMPLEMENT THIS";
+        return "Enjoy the game!";
     }
 
     private String help() {
