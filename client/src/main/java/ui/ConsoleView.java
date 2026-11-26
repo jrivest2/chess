@@ -58,8 +58,13 @@ public class ConsoleView {
     }
 
     private void drawLoop(String[] letters, ChessBoard board, ChessGame.TeamColor perspective, int[] nums, int modular) {
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 10; j++) {
+        boolean checkTeam = perspective == ChessGame.TeamColor.WHITE;
+        int i_start = checkTeam ? 0 : 9;
+        int j_start = checkTeam ? 0 : 9;
+        int iter = checkTeam ? 1 : -1;
+
+        for (int i = i_start; checkTeam ? i < 10 : i > -1; i+= iter) {
+            for (int j = j_start; checkTeam ? j < 10 : j > -1; j+= iter) {
                 if (i == 0 || i == 9 || j == 0 || j == 9) {
                     print(EscapeSequences.SET_BG_COLOR_LIGHT_GREY);
                 } else if (i % 2 == modular && j % 2 == modular || i == j || i % 2 != modular && j % 2 != modular) {
@@ -83,54 +88,58 @@ public class ConsoleView {
                 } else {
                     ChessGame.TeamColor color = board.getPiece(new ChessPosition(i, j)).getTeamColor();
                     print(EscapeSequences.SET_TEXT_COLOR_WHITE);
-                    switch (board.getPiece(new ChessPosition(i, j)).getPieceType()) {
-                        case PAWN -> {
-                            if (color == ChessGame.TeamColor.WHITE) {
-                                print(EscapeSequences.WHITE_PAWN);
-                            } else {
-                                print(EscapeSequences.BLACK_PAWN);
-                            }
-                        }
-                        case QUEEN -> {
-                            if (color == ChessGame.TeamColor.WHITE) {
-                                print(EscapeSequences.WHITE_QUEEN);
-                            } else {
-                                print(EscapeSequences.BLACK_QUEEN);
-                            }
-                        }
-                        case KING -> {
-                            if (color == ChessGame.TeamColor.WHITE) {
-                                print(EscapeSequences.WHITE_KING);
-                            } else {
-                                print(EscapeSequences.BLACK_KING);
-                            }
-                        }
-                        case ROOK -> {
-                            if (color == ChessGame.TeamColor.WHITE) {
-                                print(EscapeSequences.WHITE_ROOK);
-                            } else {
-                                print(EscapeSequences.BLACK_ROOK);
-                            }
-                        }
-                        case BISHOP -> {
-                            if (color == ChessGame.TeamColor.WHITE) {
-                                print(EscapeSequences.WHITE_BISHOP);
-                            } else {
-                                print(EscapeSequences.BLACK_BISHOP);
-                            }
-                        }
-                        case KNIGHT -> {
-                            if (color == ChessGame.TeamColor.WHITE) {
-                                print(EscapeSequences.WHITE_KNIGHT);
-                            } else {
-                                print(EscapeSequences.BLACK_KNIGHT);
-                            }
-                        }
-                    }
+                    printPiece(board,i,j, color);
                 }
                 resetColors();
             }
             print("\n");
+        }
+    }
+
+    private void printPiece(ChessBoard board, int i, int j, ChessGame.TeamColor color) {
+        switch (board.getPiece(new ChessPosition(i, j)).getPieceType()) {
+            case PAWN -> {
+                if (color == ChessGame.TeamColor.WHITE) {
+                    print(EscapeSequences.WHITE_PAWN);
+                } else {
+                    print(EscapeSequences.BLACK_PAWN);
+                }
+            }
+            case QUEEN -> {
+                if (color == ChessGame.TeamColor.WHITE) {
+                    print(EscapeSequences.WHITE_QUEEN);
+                } else {
+                    print(EscapeSequences.BLACK_QUEEN);
+                }
+            }
+            case KING -> {
+                if (color == ChessGame.TeamColor.WHITE) {
+                    print(EscapeSequences.WHITE_KING);
+                } else {
+                    print(EscapeSequences.BLACK_KING);
+                }
+            }
+            case ROOK -> {
+                if (color == ChessGame.TeamColor.WHITE) {
+                    print(EscapeSequences.WHITE_ROOK);
+                } else {
+                    print(EscapeSequences.BLACK_ROOK);
+                }
+            }
+            case BISHOP -> {
+                if (color == ChessGame.TeamColor.WHITE) {
+                    print(EscapeSequences.WHITE_BISHOP);
+                } else {
+                    print(EscapeSequences.BLACK_BISHOP);
+                }
+            }
+            case KNIGHT -> {
+                if (color == ChessGame.TeamColor.WHITE) {
+                    print(EscapeSequences.WHITE_KNIGHT);
+                } else {
+                    print(EscapeSequences.BLACK_KNIGHT);
+                }
+            }
         }
     }
 
