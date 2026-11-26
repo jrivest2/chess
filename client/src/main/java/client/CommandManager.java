@@ -117,7 +117,7 @@ public class CommandManager {
             String blackUser = game.blackUsername() != null ? game.blackUsername() : "...";
             result.append(String.format("Game %2d:\nName: %s\nWhite User: %s\nBlack User: %s\n\n", i + 1, game.gameName(), whiteUser,
                     blackUser));
-            if (i + 1 != list.games().size()) result.append("\n");
+            if (i + 1 != list.games().size()) {result.append("\n");}
         }
         return result;
     }

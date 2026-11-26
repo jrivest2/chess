@@ -3,7 +3,6 @@ package client;
 import com.google.gson.Gson;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class ResponseException extends Exception {
 
@@ -14,15 +13,8 @@ public class ResponseException extends Exception {
         NotFound,
     }
 
-    final private Code code;
-
     public ResponseException(Code code, String message) {
         super(message);
-        this.code = code;
-    }
-
-    public String toJson() {
-        return new Gson().toJson(Map.of("message", getMessage(), "status", code));
     }
 
     public static ResponseException fromJson(String json) {
@@ -30,10 +22,6 @@ public class ResponseException extends Exception {
         var status = Code.valueOf(map.get("status").toString());
         String message = map.get("message").toString();
         return new ResponseException(status, message);
-    }
-
-    public Code code() {
-        return code;
     }
 
     public static Code fromHttpStatusCode(int httpStatusCode) {
@@ -44,14 +32,5 @@ public class ResponseException extends Exception {
             return Code.ClientError;
         }
         return Code.ServerError;
-    }
-
-    public int toHttpStatusCode() {
-        return switch (code) {
-            case ServerError -> 500;
-            case ClientError -> 400;
-            case NotFound -> 404;
-            case AuthError -> 401;
-        };
     }
 }
