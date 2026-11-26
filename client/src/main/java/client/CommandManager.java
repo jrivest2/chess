@@ -36,17 +36,26 @@ public class CommandManager {
         try {
             game = gameList.get(Integer.parseInt(params[0])-1);
         } catch (Exception e) {
-            throw new ResponseException(ResponseException.Code.ClientError,"The Game ID needs to be a number");
+            throw new ResponseException(ResponseException.Code.ClientError,
+                    "The Game ID needs to be a number in the list of games. Try \"list\"");
         }
         if (Objects.equals(params[1], "white")) {
             view.drawBoard(game.game(), ChessGame.TeamColor.WHITE);
         } else if (params[1].equals("black")) {
             view.drawBoard(game.game(), ChessGame.TeamColor.BLACK);
         } else {
-            throw new ResponseException(ResponseException.Code.ClientError,"The Team Color needs to be \"white\" or \"black\"");
+            throw new ResponseException(ResponseException.Code.ClientError,
+                    "The Team Color needs to be \"white\" or \"black\"");
         }
-        serverFacade.join(params[1],game.gameID());
-        return "IMPLEMENT THIS";
+        try {
+            serverFacade.join(params[1],game.gameID());
+            return "IMPLEMENT THIS";
+        } catch (Exception e) {
+            if (e.getMessage().contains("403")){
+                throw new ResponseException(ResponseException.Code.ClientError,"That Team color is already taken.");
+            }
+        }
+        return "";
     }
     private String observe(String[] params) throws ResponseException {
         GameData game;
@@ -54,7 +63,7 @@ public class CommandManager {
             game = gameList.get(Integer.parseInt(params[0])-1);
         } catch (Exception e) {
             throw new ResponseException(ResponseException.Code.ClientError,
-                    "The Game ID needs to be a number");
+                    "The Game ID needs to be a number in the list of games. Try \"list\"");
         }        view.drawBoard(game.game(), ChessGame.TeamColor.WHITE);
         return "Enjoy the game!";
     }
@@ -119,13 +128,36 @@ public class CommandManager {
     }
 
     private String login(String[] params) throws ResponseException {
-        LoginResult result = serverFacade.login(params);
-        return "You are logged in as " + result.username();
+        LoginResult result;
+        try {
+            result = serverFacade.login(params);
+            return "You are logged in as " + result.username();
+        } catch (Exception e) {
+            if (e.getMessage().contains("401")){
+                throw new ResponseException(ResponseException.Code.AuthError,"Invalid username or password");
+            }
+            if (e.getMessage().contains("500")){
+                throw new ResponseException(ResponseException.Code.ServerError,"Something went wrong. Please try again.");
+            }
+        }
+        return "";
     }
 
     private String register(String[] params) throws ResponseException {
-        RegisterResult result = serverFacade.register(params);
-        return "You are logged in as " + result.username();
+        RegisterResult result;
+        try {
+            result = serverFacade.register(params);
+            return "You are logged in as " + result.username();
+        } catch (Exception e) {
+            if (e.getMessage().contains("403")){
+                throw new ResponseException(ResponseException.Code.ClientError,
+                        "That username is already taken");
+            }
+            if (e.getMessage().contains("500")){
+                throw new ResponseException(ResponseException.Code.ServerError,"Something went wrong. Please try again.");
+            }
+        }
+        return "";
     }
 
 
