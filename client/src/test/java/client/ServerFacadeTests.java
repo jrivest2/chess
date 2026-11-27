@@ -13,9 +13,7 @@ public class ServerFacadeTests {
 
     private static Server server;
     private static UserService userService;
-    private static final String SERVER_URL = "http://localhost:0";
-    private static final ServerFacade SERVER_FACADE = new ServerFacade(SERVER_URL);
-
+    private static ServerFacade serverFacade;
     @BeforeAll
     public static void init() {
         server = new Server();
@@ -25,6 +23,8 @@ public class ServerFacadeTests {
             throw new RuntimeException(e);
         }
         var port = server.run(0);
+        final String SERVER_URL = "http://localhost:" + port;
+        serverFacade = new ServerFacade(SERVER_URL);
         System.out.println("Started test HTTP server on " + port);
     }
 
@@ -46,51 +46,51 @@ public class ServerFacadeTests {
         RegisterResult result = new RegisterResult("","");
         try {
             //Test register
-            result = SERVER_FACADE.register(goodParams);
+            result = serverFacade.register(goodParams);
             Assertions.assertEquals("testUser", result.username());
             Assertions.assertNotEquals("", result.authToken());
-            assertTrue(SERVER_FACADE.isSignedIn());
+            assertTrue(serverFacade.isSignedIn());
             Assertions.assertThrows(ResponseException.class,
                     () -> {
-                        SERVER_FACADE.register(goodParams);});
+                        serverFacade.register(goodParams);});
             Assertions.assertThrows(ResponseException.class,
                     () -> {
-                        SERVER_FACADE.register(badParams);});
+                        serverFacade.register(badParams);});
 
             //Test create successful
-            SERVER_FACADE.create(goodParams);
+            serverFacade.create(goodParams);
             //Test list successful
             assertDoesNotThrow(() -> {
-                SERVER_FACADE.list();});
+                serverFacade.list();});
 
             //Test join/play
-            var response = SERVER_FACADE.list();
+            var response = serverFacade.list();
             int id = response.games().getFirst().gameID();
             assertDoesNotThrow(() -> {
-                SERVER_FACADE.join("white",id);});
+                serverFacade.join("white",id);});
             assertDoesNotThrow(() -> {
-                SERVER_FACADE.join("black",id);});
+                serverFacade.join("black",id);});
             assertThrows(ResponseException.class, () -> {
-                SERVER_FACADE.join("white",1);});
+                serverFacade.join("white",1);});
             assertThrows(ResponseException.class, () -> {
-                SERVER_FACADE.join("black",1);});
+                serverFacade.join("black",1);});
 
             //Test logout
-            SERVER_FACADE.logout();
-            Assertions.assertFalse(SERVER_FACADE.isSignedIn());
+            serverFacade.logout();
+            Assertions.assertFalse(serverFacade.isSignedIn());
 
             //Test create fail
             assertThrows(ResponseException.class, () -> {
-                SERVER_FACADE.create(goodParams);});
+                serverFacade.create(goodParams);});
 
             //Test list fail
-            assertThrows(ResponseException.class, SERVER_FACADE::list);
+            assertThrows(ResponseException.class, serverFacade::list);
 
             //Test login
             assertThrows(ResponseException.class, () -> {
-                SERVER_FACADE.login(badParams);});
-            SERVER_FACADE.login(goodParams);
-            assertTrue(SERVER_FACADE.isSignedIn());
+                serverFacade.login(badParams);});
+            serverFacade.login(goodParams);
+            assertTrue(serverFacade.isSignedIn());
 
         } catch (ResponseException e) {
             throw new RuntimeException(e.getMessage());
