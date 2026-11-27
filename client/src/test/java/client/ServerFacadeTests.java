@@ -92,13 +92,8 @@ public class ServerFacadeTests {
             SERVER_FACADE.login(goodParams);
             assertTrue(SERVER_FACADE.isSignedIn());
 
-            //Trigger the catch statement
-            SERVER_FACADE.register(badParams);
         } catch (ResponseException e) {
-            assertTrue(e.getMessage().contains("403")
-                    || e.getMessage().contains("400")
-                    || e.getMessage().contains("401")
-                    || e.getMessage().contains("500"));
+            throw new RuntimeException(e.getMessage());
         }
     }
 
