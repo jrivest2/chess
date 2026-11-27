@@ -13,7 +13,7 @@ public class ServerFacadeTests {
 
     private static Server server;
     private static UserService userService;
-    private static final String SERVER_URL = "http://localhost:8080";
+    private static final String SERVER_URL = "http://localhost:0";
     private static final ServerFacade SERVER_FACADE = new ServerFacade(SERVER_URL);
 
     @BeforeAll
