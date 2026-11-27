@@ -23,8 +23,8 @@ public class ServerFacadeTests {
             throw new RuntimeException(e);
         }
         var port = server.run(0);
-        final String SERVER_URL = "http://localhost:" + port;
-        serverFacade = new ServerFacade(SERVER_URL);
+        String serverUrl = "http://localhost:" + port;
+        serverFacade = new ServerFacade(serverUrl);
         System.out.println("Started test HTTP server on " + port);
     }
 
